@@ -6,7 +6,7 @@ from bullet import Bullet
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 QUIT = False
-
+NUM_OF_ENEMIES = 7
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -16,8 +16,8 @@ all_sprites_list = pygame.sprite.Group()
 bullets_sprites_list = pygame.sprite.Group()
 enemies_sprites_list = pygame.sprite.Group()
 
-for i in range(7):
-    enemy = Enemy(i * 80, 100)
+for i in range(NUM_OF_ENEMIES):
+    enemy = Enemy((i + 1) * 80, 100)
     enemies_sprites_list.add(enemy)
 
 all_sprites_list.add(enemies_sprites_list)
@@ -57,13 +57,14 @@ while not QUIT:
     bullets_sprites_list.update()
     enemies_sprites_list.update()
 
-    pygame.sprite.groupcollide(enemies_sprites_list,
-                               bullets_sprites_list,
-                               True,
-                               True,
-                               pygame.sprite.collide_mask)
+    if pygame.sprite.groupcollide(enemies_sprites_list, bullets_sprites_list, True, True, pygame.sprite.collide_mask):
+        print(NUM_OF_ENEMIES)
+        NUM_OF_ENEMIES -=1
 
     screen.fill((0, 0, 0))
     all_sprites_list.draw(screen)
     pygame.display.update()
     clock.tick(60)
+
+
+
