@@ -1,5 +1,7 @@
 import pygame
-from player import Player
+from player import Player, Direction
+from enemy import Enemy
+from bullet import Bullet
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
@@ -8,12 +10,20 @@ QUIT = False
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-player = Player(int(SCREEN_WIDTH / 2), SCREEN_HEIGHT)
+player = Player(SCREEN_WIDTH, SCREEN_HEIGHT)
+enemy = Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
 all_sprites_list = pygame.sprite.Group()
+bullets_sprites_list = pygame.sprite.Group()
+enemies_sprites_list = pygame.sprite.Group()
+
+enemies_sprites_list.add(enemy)
+all_sprites_list.add(enemies_sprites_list)
 all_sprites_list.add(player)
 
 clock = pygame.time.Clock()
+
+space_pressed = False
 
 while not QUIT:
     for event in pygame.event.get():
@@ -21,10 +31,31 @@ while not QUIT:
             QUIT = True
 
     pressed = pygame.key.get_pressed()
-    if pressed[pygame.K_UP]: player.move_up()
-    if pressed[pygame.K_DOWN]: player.move_down()
-    if pressed[pygame.K_LEFT]: player.move_left()
-    if pressed[pygame.K_RIGHT]: player.move_rght()
+    if pressed[pygame.K_UP]:
+        player.move(Direction.UP)
+
+    if pressed[pygame.K_DOWN]:
+        player.move(Direction.DOWN)
+
+    if pressed[pygame.K_LEFT]:
+        player.move(Direction.LEFT)
+
+    if pressed[pygame.K_RIGHT]:
+        player.move(Direction.RIGHT)
+
+    if pressed[pygame.K_SPACE] and not space_pressed:
+        space_pressed = True
+        bullet = Bullet(player.rect.x + player.image.get_width()/2, player.rect.y)
+        bullets_sprites_list.add(bullet)
+        all_sprites_list.add(bullets_sprites_list)
+        
+    if not pressed[pygame.K_SPACE]:
+        space_pressed = False
+
+    bullets_sprites_list.update()
+
+    if pygame.sprite.groupcollide(enemies_sprites_list, bullets_sprites_list, True, True):
+        print("collision")
 
     screen.fill((0, 0, 0))
     all_sprites_list.draw(screen)
