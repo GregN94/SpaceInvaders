@@ -11,13 +11,15 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 player = Player(SCREEN_WIDTH, SCREEN_HEIGHT)
-enemy = Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
 all_sprites_list = pygame.sprite.Group()
 bullets_sprites_list = pygame.sprite.Group()
 enemies_sprites_list = pygame.sprite.Group()
 
-enemies_sprites_list.add(enemy)
+for i in range(7):
+    enemy = Enemy(i * 80, 100)
+    enemies_sprites_list.add(enemy)
+
 all_sprites_list.add(enemies_sprites_list)
 all_sprites_list.add(player)
 
@@ -48,14 +50,18 @@ while not QUIT:
         bullet = Bullet(player.rect.x + player.image.get_width()/2, player.rect.y)
         bullets_sprites_list.add(bullet)
         all_sprites_list.add(bullets_sprites_list)
-        
+
     if not pressed[pygame.K_SPACE]:
         space_pressed = False
 
     bullets_sprites_list.update()
+    enemies_sprites_list.update()
 
-    if pygame.sprite.groupcollide(enemies_sprites_list, bullets_sprites_list, True, True):
-        print("collision")
+    pygame.sprite.groupcollide(enemies_sprites_list,
+                               bullets_sprites_list,
+                               True,
+                               True,
+                               pygame.sprite.collide_mask)
 
     screen.fill((0, 0, 0))
     all_sprites_list.draw(screen)

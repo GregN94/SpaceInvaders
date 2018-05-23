@@ -2,7 +2,7 @@ import pygame
 
 SCALE = 6
 POSITION_OFFSET = 10
-SPEED = 5
+SPEED = 1
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -14,4 +14,13 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
         self.mask = pygame.mask.from_surface(self.image)
+        self.speed = SPEED
 
+    def update(self):
+        self.rect.x += self.speed
+        if self.rect.x + self.image.get_width() / 2 > 550:
+            self.rect.y += self.image.get_height()
+            self.speed = -SPEED
+        if self.rect.x + self.image.get_width() / 2 < 50:
+            self.rect.y += self.image.get_height()
+            self.speed = SPEED
