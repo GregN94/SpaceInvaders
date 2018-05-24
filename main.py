@@ -16,10 +16,14 @@ all_sprites_list = pygame.sprite.Group()
 bullets_sprites_list = pygame.sprite.Group()
 enemies_sprites_list = pygame.sprite.Group()
 
-for i in range(NUM_OF_ENEMIES):
-    enemy = Enemy((i + 1) * 80, 100)
-    enemies_sprites_list.add(enemy)
 
+def generate_enemies():
+    for i in range(NUM_OF_ENEMIES):
+        enemy = Enemy((i + 1) * 80, 100)
+        enemies_sprites_list.add(enemy)
+
+
+generate_enemies()
 all_sprites_list.add(enemies_sprites_list)
 all_sprites_list.add(player)
 
@@ -27,10 +31,34 @@ clock = pygame.time.Clock()
 
 space_pressed = False
 
-while not QUIT:
+
+def shot_bullet():
+    global space_pressed
+    space_pressed = True
+    bullet = Bullet(player.rect.x + player.image.get_width() / 2, player.rect.y)
+    bullets_sprites_list.add(bullet)
+    all_sprites_list.add(bullets_sprites_list)
+
+
+def bullet_enemy_collision_handler():
+    global NUM_OF_ENEMIES
+    if pygame.sprite.groupcollide(enemies_sprites_list,
+                                  bullets_sprites_list,
+                                  True,
+                                  True,
+                                  pygame.sprite.collide_mask):
+        NUM_OF_ENEMIES -= 1
+
+
+def check_if_game_quited():
+    global QUIT
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             QUIT = True
+
+
+while not QUIT:
+    check_if_game_quited()
 
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:
@@ -46,20 +74,14 @@ while not QUIT:
         player.move(Direction.RIGHT)
 
     if pressed[pygame.K_SPACE] and not space_pressed:
-        space_pressed = True
-        bullet = Bullet(player.rect.x + player.image.get_width()/2, player.rect.y)
-        bullets_sprites_list.add(bullet)
-        all_sprites_list.add(bullets_sprites_list)
+        shot_bullet()
 
     if not pressed[pygame.K_SPACE]:
         space_pressed = False
 
-    bullets_sprites_list.update()
-    enemies_sprites_list.update()
+    all_sprites_list.update()
 
-    if pygame.sprite.groupcollide(enemies_sprites_list, bullets_sprites_list, True, True, pygame.sprite.collide_mask):
-        print(NUM_OF_ENEMIES)
-        NUM_OF_ENEMIES -=1
+    bullet_enemy_collision_handler()
 
     screen.fill((0, 0, 0))
     all_sprites_list.draw(screen)
