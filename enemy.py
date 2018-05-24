@@ -1,4 +1,6 @@
 import pygame
+import random
+from bullet import EnemyBullet, enemy_bullets_list
 
 SCALE = 6
 POSITION_OFFSET = 10
@@ -24,3 +26,11 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.x + self.image.get_width() / 2 < 50:
             self.rect.y += self.image.get_height()
             self.speed = SPEED
+
+        if random.randrange(0, 100, 2) == 0:
+            self.shot_bullet()
+
+    def shot_bullet(self):
+        bullet = EnemyBullet(self.rect.x + self.image.get_width() / 2,
+                             self.rect.y + self.image.get_height() + POSITION_OFFSET)
+        enemy_bullets_list.add(bullet)

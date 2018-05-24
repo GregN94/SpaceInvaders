@@ -4,6 +4,9 @@ SCALE = 10
 POSITION_OFFSET = 10
 SPEED = 5
 
+bullets_list = pygame.sprite.Group()
+enemy_bullets_list = pygame.sprite.Group()
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -19,6 +22,18 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y -= SPEED
         if self.rect.y < 10:
             self.kill()
+
+
+class EnemyBullet(Bullet):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+
+    def update(self):
+        self.rect.y += SPEED
+        if self.rect.y > 580:
+            self.kill()
+
+
 
 
 
