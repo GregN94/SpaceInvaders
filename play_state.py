@@ -4,7 +4,7 @@ from enemy import Enemy
 from bullet import bullets_list, enemy_bullets_list
 
 
-NUM_OF_ENEMIES = 10
+NUM_OF_ENEMIES = 0
 
 
 class PlayState:

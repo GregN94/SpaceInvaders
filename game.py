@@ -1,7 +1,7 @@
 import pygame
 from play_state import PlayState
 
-SCREEN_WIDTH = 600
+SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 
 
