@@ -11,7 +11,6 @@ enemy_bullets_list = pygame.sprite.Group()
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-
         self.image = pygame.image.load("Images/bullet.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
@@ -20,17 +19,18 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= SPEED
-        if self.rect.y < 10:
+        if self.rect.y < 0:
             self.kill()
 
 
 class EnemyBullet(Bullet):
     def __init__(self, x, y):
         super().__init__(x, y)
+        self.image.fill((255, 0, 0))
 
     def update(self):
         self.rect.y += SPEED
-        if self.rect.y > 580:
+        if self.rect.y > 800:
             self.kill()
 
 

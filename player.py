@@ -21,19 +21,32 @@ class Player(pygame.sprite.Sprite):
         self.space_pressed = False  # TODO change pressing space so this var can be removed
         self.image = pygame.image.load("Images/space_ship.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image2 = self.image.copy()
         self.rect = self.image.get_rect()
-        self.rect.center = (int(x / 2), y - int(self.image.get_height() / 2) - POSITION_OFFSET)
+        self.rect.center = (int(x / 2), y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
         self.mask = pygame.mask.from_surface(self.image)
         self.bounds = [POSITION_OFFSET,
-                       x - self.image.get_width() - POSITION_OFFSET,
+                       x - self.image2.get_width() - POSITION_OFFSET,
                        y / 2,
-                       y - self.image.get_height() - POSITION_OFFSET]
+                       y - self.image2.get_height() - POSITION_OFFSET]
+        self.angle = 0
+
+    def update(self):
+        if self.angle > 0:
+            self.angle -= 1
+        if self.angle < 0:
+            self.angle += 1
+        self.image = pygame.transform.rotate(self.image2, self.angle)
 
     def move(self, direction):
         if direction == Direction.LEFT:
             self.move_left()
+            if self.angle < 20:
+                self.angle += 2
         if direction == Direction.RIGHT:
             self.move_right()
+            if self.angle > -20:
+                self.angle -= 2
 
     def move_left(self):
         if self.rect.x > self.bounds[0]:
@@ -45,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
     def shot_bullet(self):
         self.space_pressed = True
-        bullet = Bullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
+        bullet = Bullet(self.rect.x + self.image2.get_width() / 2, self.rect.y)
         bullets_list.add(bullet)
 
 
