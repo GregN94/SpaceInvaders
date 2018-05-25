@@ -4,7 +4,7 @@ from bullet import Bullet, bullets_list
 
 SCALE = 5
 POSITION_OFFSET = 10
-MAX_SPEED = 10
+MAX_SPEED = 6
 MAX_ANGLE = 15
 SPEED_DAMPING = 0.5
 ANGLE_DAMPING = 1
