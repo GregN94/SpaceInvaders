@@ -19,7 +19,9 @@ class MenuState:
         self.start_button_sprite = StartButtonSprite(screen_width, screen_height)
 
         self.menu_sprites_list = pygame.sprite.Group()
-        self.menu_sprites_list.add(self.menu_sprite, self.logo_sprite, self.start_button_sprite)
+        self.background_sprite_list = pygame.sprite.Group()
+        self.background_sprite_list.add(self.menu_sprite)
+        self.menu_sprites_list.add(self.logo_sprite, self.start_button_sprite)
         self.new_state = States.MENU
 
     def menu(self):
@@ -35,5 +37,6 @@ class MenuState:
         return self.new_state
 
     def draw(self, screen):
+        self.background_sprite_list.draw(screen)
         self.menu_sprites_list.draw(screen)
 
