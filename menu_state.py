@@ -19,12 +19,11 @@ class MenuState:
         self.start_button_sprite = StartButtonSprite(screen_width, screen_height)
 
         self.menu_sprites_list = pygame.sprite.Group()
-        self.menu_sprites_list.add(self.menu_sprite)
-        self.menu_sprites_list.add(self.logo_sprite)
-        self.menu_sprites_list.add(self.start_button_sprite)
+        self.menu_sprites_list.add(self.menu_sprite, self.logo_sprite, self.start_button_sprite)
         self.new_state = States.MENU
 
     def menu(self):
+        self.menu_sprites_list.update()
         mouse_position = pygame.mouse.get_pos()
         self.start_button_sprite.set_state(INACTIVE)
         if self.start_button_sprite.rect.collidepoint(mouse_position):

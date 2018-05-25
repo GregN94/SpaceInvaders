@@ -32,8 +32,8 @@ class Game:
                 self.play_state.play()
                 self.play_state.draw(self.screen)
             if state == States.MENU:
-                self.menu_state.draw(self.screen)
                 state = self.menu_state.menu()
+                self.menu_state.draw(self.screen)
             pygame.display.update()
             self.clock.tick(60)
 

@@ -49,9 +49,8 @@ class PlayState:
         if not pressed[pygame.K_SPACE]:
             self.player.space_pressed = False
 
+        self.all_sprites_list.add(bullets_list, enemy_bullets_list)
         self.all_sprites_list.update()
-        self.all_sprites_list.add(bullets_list)
-        self.all_sprites_list.add(enemy_bullets_list) # TODO cehck if this add can be combined with one above
 
         self.bullet_enemy_collision_handler()
         self.bullet_player_collision_handler()
