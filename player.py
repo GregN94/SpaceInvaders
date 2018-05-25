@@ -4,7 +4,7 @@ from bullet import Bullet, bullets_list
 
 SCALE = 5
 POSITION_OFFSET = 10
-MAX_SPEED = 6
+MAX_SPEED = 4
 MAX_ANGLE = 15
 SPEED_DAMPING = 0.5
 ANGLE_DAMPING = 1
@@ -30,10 +30,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (int(x / 2), y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
         self.mask = pygame.mask.from_surface(self.image)
-        self.bounds = [7.5 * POSITION_OFFSET,
-                       x - self.image2.get_width() - 7.5 * POSITION_OFFSET,
+        self.bounds = [POSITION_OFFSET,
+                       x - self.image.get_width() - POSITION_OFFSET,
                        y / 2,
-                       y - self.image2.get_height() - POSITION_OFFSET]
+                       y - self.image.get_height() - POSITION_OFFSET]
         self.angle = 0
         self.speed = 0
 
