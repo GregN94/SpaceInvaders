@@ -13,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image_number = 0
-        self.image = pygame.image.load(ENEMY_PATH[self.image_number]).convert_alpha()
+        self.image = pygame.image.load(ENEMY_PATH[self.image_number])
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
@@ -26,7 +26,7 @@ class Enemy(pygame.sprite.Sprite):
         else:
             self.image_number = 0
         position = self.rect.center
-        self.image = pygame.image.load(ENEMY_PATH[self.image_number]).convert_alpha()
+        self.image = pygame.image.load(ENEMY_PATH[self.image_number])
         self.image = pygame.transform.scale(self.image,
                                             [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()

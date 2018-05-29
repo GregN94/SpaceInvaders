@@ -12,6 +12,7 @@ class PlayState:
         self.player = Player(screen_width, screen_height)
         self.all_sprites_list = pygame.sprite.Group()
         self.enemies_sprites_list = pygame.sprite.Group()
+        self.pause_sprites_list = pygame.sprite.Group()
         self.all_sprites_list.add(self.player)
 
     def generate_enemies(self):
@@ -57,3 +58,6 @@ class PlayState:
 
     def draw(self, screen):
         self.all_sprites_list.draw(screen)
+
+
+

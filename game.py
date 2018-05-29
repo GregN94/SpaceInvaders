@@ -1,6 +1,7 @@
 import pygame
 from play_state import PlayState
 from menu_state import MenuState, States
+from pause_state import Pause
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
@@ -15,27 +16,39 @@ class Game:
         self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.play_state.generate_enemies()
         self.menu_state = MenuState(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.pause_state = Pause(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.state = States.MENU
 
-    def check_if_game_quited(self):
+    def execute_basic_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.QUIT = True
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    if self.state == States.PAUSE:
+                        self.state = States.GAME
+                    elif self.state == States.GAME:
+                        self.state = States.PAUSE
 
     def main(self):
-        state = States.MENU
         while not self.QUIT:
-
             self.screen.fill((0, 0, 0))
-            self.check_if_game_quited()
+            self.execute_basic_input()
 
-            if state == States.GAME:
+            if self.state == States.PAUSE:
+                self.play_state.draw(self.screen)
+                self.pause_state.draw(self.screen)
+
+            if self.state == States.GAME:
                 self.play_state.play()
                 self.play_state.draw(self.screen)
-            if state == States.MENU:
-                state = self.menu_state.menu()
+
+            if self.state == States.MENU:
+                self.state = self.menu_state.menu()
                 self.menu_state.draw(self.screen)
-            if state == States.EXIT:
+            if self.state == States.EXIT:
                 self.QUIT = True
+
             pygame.display.update()
             self.clock.tick(60)
 

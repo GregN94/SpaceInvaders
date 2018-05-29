@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         self.space_pressed = False  # TODO change pressing space so this var can be removed
-        self.image = pygame.image.load("Images/space_ship.png").convert_alpha()
+        self.image = pygame.image.load("Images/space_ship.png")
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.image2 = self.image.copy()
         self.rect = self.image.get_rect()

@@ -10,6 +10,7 @@ class States(Enum):
     GAME = 1
     MENU = 2
     EXIT = 3
+    PAUSE = 4
 
 
 class MenuState:
