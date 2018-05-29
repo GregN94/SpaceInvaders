@@ -44,6 +44,27 @@ class StartButtonSprite(pygame.sprite.Sprite):
         self.rect.center = position
 
 
+EXIT_BUTTON = ["Images/exit_button_inactive.png", "Images/exit_button_active.png"]
+
+
+class ExitButtonSprite(pygame.sprite.Sprite):
+    def __init__(self, screen_width, screen_height):
+        super().__init__()
+        self.image = pygame.image.load(EXIT_BUTTON[0]).convert_alpha()
+        self.image = pygame.transform.scale(self.image,
+                                            [int(dimension / BUTTON_SCALE) for dimension in self.image.get_size()])
+        self.rect = self.image.get_rect()
+        self.rect.center = (int(screen_width / 2), int(screen_height / 1.5))
+
+    def set_state(self, state):
+        position = self.rect.center
+        self.image = pygame.image.load(EXIT_BUTTON[state]).convert_alpha()
+        self.image = pygame.transform.scale(self.image,
+                                            [int(dimension / BUTTON_SCALE) for dimension in self.image.get_size()])
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+
+
 
 
 

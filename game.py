@@ -34,6 +34,8 @@ class Game:
             if state == States.MENU:
                 state = self.menu_state.menu()
                 self.menu_state.draw(self.screen)
+            if state == States.EXIT:
+                self.QUIT = True
             pygame.display.update()
             self.clock.tick(60)
 
