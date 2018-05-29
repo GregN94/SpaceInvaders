@@ -27,22 +27,23 @@ class MenuState:
         self.new_state = States.MENU
 
     def menu(self):
-        self.menu_sprites_list.update()
         mouse_position = pygame.mouse.get_pos()
+        pressed = pygame.mouse.get_pressed()
+
         self.start_button_sprite.set_state(INACTIVE)
         self.exit_button_sprite.set_state(INACTIVE)
+
         if self.start_button_sprite.rect.collidepoint(mouse_position):
-            self.start_button_sprite.set_state(ACTIVE)
-            pressed = pygame.mouse.get_pressed()
             if pressed[0]:
                 self.new_state = States.GAME
+            self.start_button_sprite.set_state(ACTIVE)
 
         if self.exit_button_sprite.rect.collidepoint(mouse_position):
-            self.exit_button_sprite.set_state(ACTIVE)
-            pressed = pygame.mouse.get_pressed()
             if pressed[0]:
                 self.new_state = States.EXIT
+            self.exit_button_sprite.set_state(ACTIVE)
 
+        self.menu_sprites_list.update()
         return self.new_state
 
     def draw(self, screen):
