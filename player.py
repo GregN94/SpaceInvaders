@@ -28,7 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.image2 = self.image.copy()
         self.rect = self.image.get_rect()
-        self.rect.center = (int(x / 2), y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
+        self.initial_position = (int(x / 2), y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
+        self.rect.center = self.initial_position
         self.mask = pygame.mask.from_surface(self.image)
         self.bounds = [POSITION_OFFSET,
                        x - self.image.get_width() - POSITION_OFFSET,
@@ -56,6 +57,9 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.transform.rotate(self.image2, self.angle)
         self.rect.x += self.speed
+
+    def damage(self):
+        self.rect.center = self.initial_position
 
     def move(self, direction):
         if direction == Direction.LEFT:
