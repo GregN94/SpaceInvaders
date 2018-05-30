@@ -1,7 +1,8 @@
 import pygame
 from enum import Enum
-from menu_sprites import MenuSprite, LogoSprite, StartButtonSprite, ExitButtonSprite
+from buttons import StartButtonSprite, ExitButtonSprite
 
+LOGO_SCALE = 1.5
 INACTIVE = 0
 ACTIVE = 1
 
@@ -13,9 +14,27 @@ class States(Enum):
     PAUSE = 4
 
 
+class MenuBackground(pygame.sprite.Sprite):
+    def __init__(self, screen_width, screen_height):
+        super().__init__()
+        self.image = pygame.image.load("Images/menu_background.png")
+        self.image = pygame.transform.scale(self.image, [screen_width, screen_height])
+        self.rect = self.image.get_rect()
+
+
+class LogoSprite(pygame.sprite.Sprite):
+    def __init__(self, screen_width):
+        super().__init__()
+        self.image = pygame.image.load("Images/menu_logo.png")
+        self.image = pygame.transform.scale(self.image,
+                                            [int(dimension / LOGO_SCALE) for dimension in self.image.get_size()])
+        self.rect = self.image.get_rect()
+        self.rect.center = (int(screen_width / 2), int(self.image.get_height() / 2))
+
+
 class MenuState:
     def __init__(self, screen_width, screen_height):
-        self.menu_sprite = MenuSprite(screen_width, screen_height)
+        self.menu_sprite = MenuBackground(screen_width, screen_height)
         self.logo_sprite = LogoSprite(screen_width)
         self.start_button_sprite = StartButtonSprite(screen_width, screen_height)
         self.exit_button_sprite = ExitButtonSprite(screen_width, screen_height)
@@ -49,4 +68,5 @@ class MenuState:
     def draw(self, screen):
         self.background_sprite_list.draw(screen)
         self.menu_sprites_list.draw(screen)
+
 
