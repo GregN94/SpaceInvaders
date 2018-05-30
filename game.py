@@ -44,7 +44,6 @@ class Game:
         self.menu_state.draw(self.screen)
 
     def main(self):
-
         while not self.EXIT:
 
             self.screen.fill((0, 0, 0))

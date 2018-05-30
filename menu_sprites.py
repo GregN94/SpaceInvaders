@@ -3,8 +3,8 @@ import pygame
 
 LOGO_SCALE = 1.5
 BUTTON_SCALE = 2
-START_BUTTON = ["Images/start_button_inactive.png", "Images/start_button_active.png"]
-EXIT_BUTTON = ["Images/exit_button_inactive.png", "Images/exit_button_active.png"]
+START_BUTTON = ["Images/Buttons/start_button_inactive.png", "Images/Buttons/start_button_active.png"]
+EXIT_BUTTON = ["Images/Buttons/exit_button_inactive.png", "Images/Buttons/exit_button_active.png"]
 
 
 class MenuSprite(pygame.sprite.Sprite):
@@ -46,7 +46,7 @@ class StartButtonSprite(pygame.sprite.Sprite):
 class ExitButtonSprite(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__()
-        self.image = pygame.image.load(EXIT_BUTTON[0]).convert_alpha()
+        self.image = pygame.image.load(EXIT_BUTTON[0])
         self.image = pygame.transform.scale(self.image,
                                             [int(dimension / BUTTON_SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
@@ -54,7 +54,7 @@ class ExitButtonSprite(pygame.sprite.Sprite):
 
     def set_state(self, state):
         position = self.rect.center
-        self.image = pygame.image.load(EXIT_BUTTON[state]).convert_alpha()
+        self.image = pygame.image.load(EXIT_BUTTON[state])
         self.image = pygame.transform.scale(self.image,
                                             [int(dimension / BUTTON_SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
