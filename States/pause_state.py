@@ -1,5 +1,5 @@
 import pygame
-from buttons import ExitButtonSprite, ResumeButton
+from buttons import ExitButtonSprite, ResumeButton, RetryButton
 from States.menu_state import States
 
 INACTIVE = 0
@@ -44,6 +44,7 @@ class Pause:
         self.pause_panel = PausePanel(screen_width, screen_height)
         self.pause_logo = PauseLogo(screen_width, screen_height)
         self.resume_button = ResumeButton(screen_width, screen_height)
+        self.retry_button = RetryButton(screen_width, screen_height)
         self.exit_button = ExitButtonSprite(screen_width, screen_height)
 
         self.background_sprites_list = pygame.sprite.Group()
@@ -53,7 +54,7 @@ class Pause:
         self.panel_sprite_list.add(self.pause_panel)
 
         self.buttons_sprite_list = pygame.sprite.Group()
-        self.buttons_sprite_list.add(self.pause_logo, self.exit_button, self.resume_button)
+        self.buttons_sprite_list.add(self.pause_logo, self.exit_button, self.resume_button, self.retry_button)
 
     def update(self):
         new_state = States.PAUSE
@@ -62,6 +63,7 @@ class Pause:
 
         self.exit_button.set_state(INACTIVE)
         self.resume_button.set_state(INACTIVE)
+        self.retry_button.set_state(INACTIVE)
 
         if self.exit_button.rect.collidepoint(mouse_position):
             if pressed[0]:
@@ -72,6 +74,11 @@ class Pause:
             if pressed[0]:
                 new_state = States.GAME
             self.resume_button.set_state(ACTIVE)
+
+        if self.retry_button.rect.collidepoint(mouse_position):
+            if pressed[0]:
+                new_state = States.RETRY
+            self.retry_button.set_state(ACTIVE)
 
         self.buttons_sprite_list.update()
         return new_state

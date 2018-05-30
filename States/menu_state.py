@@ -12,6 +12,7 @@ class States(Enum):
     MENU = 2
     EXIT = 3
     PAUSE = 4
+    RETRY = 5
 
 
 class MenuBackground(pygame.sprite.Sprite):
