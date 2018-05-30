@@ -14,6 +14,7 @@ class States(Enum):
     PAUSE = 4
     RETRY = 5
     GO_TO_MENU = 6
+    GAME_OVER = 7
 
 
 class MenuBackground(pygame.sprite.Sprite):

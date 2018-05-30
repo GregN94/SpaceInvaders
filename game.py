@@ -1,7 +1,7 @@
 import pygame
 from States.play_state import PlayState
 from States.menu_state import MenuState, States
-from States.additional_states import Pause
+from States.additional_states import Pause, GameOver
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
@@ -16,6 +16,7 @@ class Game:
         self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.menu_state = MenuState(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.pause_state = Pause(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.game_over_state = GameOver(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.state = States.MENU
 
     def basic_input(self):
@@ -35,7 +36,7 @@ class Game:
         self.pause_state.draw(self.screen)
 
     def state_game(self):
-        self.play_state.play()
+        self.state = self.play_state.play()
         self.play_state.draw(self.screen)
 
     def state_menu(self):
@@ -49,6 +50,11 @@ class Game:
     def go_to_menu(self):
         self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.state = States.MENU
+
+    def game_over(self):
+        self.play_state.draw(self.screen)
+        self.state = self.game_over_state.update()
+        self.game_over_state.draw(self.screen)
 
     def main(self):
         while not self.EXIT:
@@ -70,6 +76,9 @@ class Game:
 
             if self.state == States.GO_TO_MENU:
                 self.go_to_menu()
+
+            if self.state == States.GAME_OVER:
+                self.game_over()
 
             if self.state == States.EXIT:
                 self.EXIT = True

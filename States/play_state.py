@@ -2,6 +2,7 @@ import pygame
 from player import Player, Direction
 from enemy import Enemy
 from bullet import BulletsSprites
+from States.menu_state import States
 
 
 NUM_OF_ENEMIES = 10
@@ -31,6 +32,7 @@ class PlayState:
         self.all_sprites_list.add(self.player)
         self.generate_enemies()
         self.generate_lives()
+        self.state = States.GAME
 
     def generate_lives(self):
         for i in range(self.num_of_lives):
@@ -63,6 +65,7 @@ class PlayState:
                 self.player.damage()
             if len(self.lives) == 0:
                 self.player.kill()
+                self.state = States.GAME_OVER
             sprite.kill()
 
     def play(self):
@@ -84,6 +87,8 @@ class PlayState:
 
         self.bullet_enemy_collision_handler()
         self.bullet_player_collision_handler()
+
+        return self.state
 
     def draw(self, screen):
         self.all_sprites_list.draw(screen)
