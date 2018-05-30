@@ -72,7 +72,7 @@ class Pause:
             new_state = States.RETRY
 
         if self.go_to_menu_button.check():
-            new_state = States.MENU
+            new_state = States.GO_TO_MENU
 
         self.buttons_sprite_list.update()
         return new_state

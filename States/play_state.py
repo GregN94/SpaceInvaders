@@ -5,17 +5,38 @@ from bullet import BulletsSprites
 
 
 NUM_OF_ENEMIES = 10
+SCALE = 4
+
+
+class Heart(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.image.load("Images/heart.png")
+        self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
 
 
 class PlayState:
     def __init__(self, screen_width, screen_height):
+        self.num_of_lives = 3
+        self.lives = []
         self.num_of_enemies = NUM_OF_ENEMIES
         self.bullets_sprites = BulletsSprites()
         self.player = Player(screen_width, screen_height, self.bullets_sprites.bullets_list)
+
         self.all_sprites_list = pygame.sprite.Group()
         self.enemies_sprites_list = pygame.sprite.Group()
         self.pause_sprites_list = pygame.sprite.Group()
         self.all_sprites_list.add(self.player)
+        self.generate_enemies()
+        self.generate_lives()
+
+    def generate_lives(self):
+        for i in range(self.num_of_lives):
+            heart = Heart(40 + i * 80, 40)
+            self.lives.append(heart)
+            self.all_sprites_list.add(heart)
 
     def generate_enemies(self):
         for i in range(self.num_of_enemies):

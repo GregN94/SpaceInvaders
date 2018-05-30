@@ -14,7 +14,6 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.play_state.generate_enemies()
         self.menu_state = MenuState(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.pause_state = Pause(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.state = States.MENU
@@ -40,15 +39,16 @@ class Game:
         self.play_state.draw(self.screen)
 
     def state_menu(self):
-        self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.play_state.generate_enemies()
-        self.state = self.menu_state.menu()
+        self.state = self.menu_state.update()
         self.menu_state.draw(self.screen)
 
     def state_retry(self):
         self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.play_state.generate_enemies()
         self.state = States.GAME
+
+    def go_to_menu(self):
+        self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.state = States.MENU
 
     def main(self):
         while not self.EXIT:
@@ -67,6 +67,9 @@ class Game:
 
             if self.state == States.RETRY:
                 self.state_retry()
+
+            if self.state == States.GO_TO_MENU:
+                self.go_to_menu()
 
             if self.state == States.EXIT:
                 self.EXIT = True

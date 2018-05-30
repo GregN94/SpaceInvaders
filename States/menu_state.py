@@ -13,6 +13,7 @@ class States(Enum):
     EXIT = 3
     PAUSE = 4
     RETRY = 5
+    GO_TO_MENU = 6
 
 
 class MenuBackground(pygame.sprite.Sprite):
@@ -45,23 +46,14 @@ class MenuState:
         self.background_sprite_list.add(self.menu_sprite)
         self.menu_sprites_list.add(self.logo_sprite, self.start_button_sprite, self.exit_button_sprite)
 
-    def menu(self):
+    def update(self):
         new_state = States.MENU
-        mouse_position = pygame.mouse.get_pos()
-        pressed = pygame.mouse.get_pressed()
 
-        self.start_button_sprite.set_state(INACTIVE)
-        self.exit_button_sprite.set_state(INACTIVE)
+        if self.start_button_sprite.check():
+            new_state = States.GAME
 
-        if self.start_button_sprite.rect.collidepoint(mouse_position):
-            if pressed[0]:
-                new_state = States.GAME
-            self.start_button_sprite.set_state(ACTIVE)
-
-        if self.exit_button_sprite.rect.collidepoint(mouse_position):
-            if pressed[0]:
-                new_state = States.EXIT
-            self.exit_button_sprite.set_state(ACTIVE)
+        if self.exit_button_sprite.check():
+            new_state = States.EXIT
 
         self.menu_sprites_list.update()
         return new_state
