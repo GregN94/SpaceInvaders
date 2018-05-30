@@ -24,6 +24,7 @@ class PlayState:
         self.num_of_enemies = NUM_OF_ENEMIES
         self.bullets_sprites = BulletsSprites()
         self.player = Player(screen_width, screen_height, self.bullets_sprites.bullets_list)
+        self.player_initial_position = self.player.rect.center
 
         self.all_sprites_list = pygame.sprite.Group()
         self.enemies_sprites_list = pygame.sprite.Group()
@@ -60,6 +61,7 @@ class PlayState:
             if len(self.lives):
                 heart = self.lives.pop()
                 heart.kill()
+                self.player.rect.center = self.player_initial_position
             if len(self.lives) == 0:
                 self.player.kill()
             sprite.kill()
