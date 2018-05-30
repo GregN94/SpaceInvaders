@@ -1,6 +1,6 @@
 import pygame
 from enum import Enum
-from bullet import Bullet, bullets_list
+from bullet import Bullet
 
 SCALE = 5
 POSITION_OFFSET = 10
@@ -20,7 +20,7 @@ class Direction(Enum):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, bullets_list):
         super().__init__()
 
         self.space_pressed = False  # TODO change pressing space so this var can be removed
@@ -36,6 +36,7 @@ class Player(pygame.sprite.Sprite):
                        y - self.image.get_height() - POSITION_OFFSET]
         self.angle = 0
         self.speed = 0
+        self.bullets_list = bullets_list
 
     def update_angle(self):
         if self.angle > 0:
@@ -79,6 +80,6 @@ class Player(pygame.sprite.Sprite):
     def shot_bullet(self):
         self.space_pressed = True
         bullet = Bullet(self.rect.x + self.image2.get_width() / 2, self.rect.y)
-        bullets_list.add(bullet)
+        self.bullets_list.add(bullet)
 
 

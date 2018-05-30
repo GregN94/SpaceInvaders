@@ -4,8 +4,11 @@ SCALE = 10
 POSITION_OFFSET = 10
 SPEED = 5
 
-bullets_list = pygame.sprite.Group()
-enemy_bullets_list = pygame.sprite.Group()
+
+class BulletsSprites:
+    def __init__(self):
+        self.bullets_list = pygame.sprite.Group()
+        self.enemy_bullets_list = pygame.sprite.Group()
 
 
 class Bullet(pygame.sprite.Sprite):

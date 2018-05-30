@@ -1,6 +1,6 @@
 import pygame
 import random
-from bullet import EnemyBullet, enemy_bullets_list
+from bullet import EnemyBullet
 
 SCALE = 6
 POSITION_OFFSET = 10
@@ -9,7 +9,7 @@ ENEMY_PATH = ["Images/enemy.png", "Images/enemy_up.png"]
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, enemy_bullets_list):
         super().__init__()
         self.image_number = 0
         self.image = pygame.image.load(ENEMY_PATH[self.image_number])
@@ -18,6 +18,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = SPEED
+        self.enemy_bullets_list = enemy_bullets_list
 
     def animation(self):
         if self.image_number == 0:
@@ -50,4 +51,4 @@ class Enemy(pygame.sprite.Sprite):
     def shot_bullet(self):
         bullet = EnemyBullet(self.rect.x + self.image.get_width() / 2,
                              self.rect.y + self.image.get_height() + POSITION_OFFSET)
-        enemy_bullets_list.add(bullet)
+        self.enemy_bullets_list.add(bullet)

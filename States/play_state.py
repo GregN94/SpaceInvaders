@@ -1,7 +1,7 @@
 import pygame
 from player import Player, Direction
 from enemy import Enemy
-from bullet import bullets_list, enemy_bullets_list
+from bullet import BulletsSprites
 
 
 NUM_OF_ENEMIES = 10
@@ -10,7 +10,8 @@ NUM_OF_ENEMIES = 10
 class PlayState:
     def __init__(self, screen_width, screen_height):
         self.num_of_enemies = NUM_OF_ENEMIES
-        self.player = Player(screen_width, screen_height)
+        self.bullets_sprites = BulletsSprites()
+        self.player = Player(screen_width, screen_height, self.bullets_sprites.bullets_list)
         self.all_sprites_list = pygame.sprite.Group()
         self.enemies_sprites_list = pygame.sprite.Group()
         self.pause_sprites_list = pygame.sprite.Group()
@@ -18,20 +19,22 @@ class PlayState:
 
     def generate_enemies(self):
         for i in range(self.num_of_enemies):
-            enemy = Enemy((i + 1) * 80, 100)
+            enemy = Enemy((i + 1) * 80, 100, self.bullets_sprites.enemy_bullets_list)
             self.enemies_sprites_list.add(enemy)
             self.all_sprites_list.add(self.enemies_sprites_list)
 
     def bullet_enemy_collision_handler(self):
         if pygame.sprite.groupcollide(self.enemies_sprites_list,
-                                      bullets_list,
+                                      self.bullets_sprites.bullets_list,
                                       True,
                                       True,
                                       pygame.sprite.collide_mask):
             self.num_of_enemies -= 1
 
     def bullet_player_collision_handler(self):
-        sprite = pygame.sprite.spritecollideany(self.player, enemy_bullets_list, pygame.sprite.collide_mask)
+        sprite = pygame.sprite.spritecollideany(self.player,
+                                                self.bullets_sprites.enemy_bullets_list,
+                                                pygame.sprite.collide_mask)
         if sprite:
             self.player.kill()
             sprite.kill()
@@ -50,7 +53,7 @@ class PlayState:
         if not pressed[pygame.K_SPACE]:
             self.player.space_pressed = False
 
-        self.all_sprites_list.add(bullets_list, enemy_bullets_list)
+        self.all_sprites_list.add(self.bullets_sprites.bullets_list, self.bullets_sprites.enemy_bullets_list)
         self.all_sprites_list.update()
 
         self.bullet_enemy_collision_handler()
