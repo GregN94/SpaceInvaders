@@ -57,7 +57,11 @@ class PlayState:
                                                 self.bullets_sprites.enemy_bullets_list,
                                                 pygame.sprite.collide_mask)
         if sprite:
-            self.player.kill()
+            if len(self.lives):
+                heart = self.lives.pop()
+                heart.kill()
+            if len(self.lives) == 0:
+                self.player.kill()
             sprite.kill()
 
     def play(self):
