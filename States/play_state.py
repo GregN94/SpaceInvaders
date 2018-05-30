@@ -53,6 +53,8 @@ class PlayState:
                                       True,
                                       pygame.sprite.collide_mask):
             self.num_of_enemies -= 1
+        if self.num_of_enemies == 0:
+            self.state = States.WIN
 
     def bullet_player_collision_handler(self):
         sprite = pygame.sprite.spritecollideany(self.player,
@@ -89,6 +91,10 @@ class PlayState:
         self.bullet_player_collision_handler()
 
         return self.state
+
+    def animation(self):
+        self.all_sprites_list.add(self.bullets_sprites.enemy_bullets_list)
+        self.all_sprites_list.update()
 
     def draw(self, screen):
         self.all_sprites_list.draw(screen)

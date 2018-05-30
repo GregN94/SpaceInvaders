@@ -111,5 +111,24 @@ class GameOver(BasicState):
         return new_state
 
 
+class WinState(BasicState):
+    def __init__(self, screen_width, screen_height):
+        super().__init__(screen_width, screen_height, "Images/game_over.png")
+
+    def update(self):
+        new_state = States.WIN
+
+        if self.exit_button.check():
+            new_state = States.EXIT
+
+        if self.retry_button.check():
+            new_state = States.RETRY
+
+        if self.go_to_menu_button.check():
+            new_state = States.GO_TO_MENU
+
+        self.buttons_sprite_list.update()
+        return new_state
+
 
 
