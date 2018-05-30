@@ -1,7 +1,7 @@
 import pygame
-from play_state import PlayState
-from menu_state import MenuState, States
-from pause_state import Pause
+from States.play_state import PlayState
+from States.menu_state import MenuState, States
+from States.pause_state import Pause
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600

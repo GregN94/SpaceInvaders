@@ -1,6 +1,6 @@
 import pygame
 from buttons import ExitButtonSprite, ResumeButton
-from menu_state import States
+from States.menu_state import States
 
 INACTIVE = 0
 ACTIVE = 1
