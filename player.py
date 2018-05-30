@@ -25,8 +25,9 @@ class Player(pygame.sprite.Sprite):
 
         self.space_pressed = False  # TODO change pressing space so this var can be removed
         self.image = pygame.image.load("Images/space_ship.png")
-        self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
-        self.image2 = self.image.copy()
+        self.image = pygame.transform.scale(self.image,
+                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image_copy = self.image.copy()
         self.rect = self.image.get_rect()
         self.initial_position = (int(x / 2), y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
         self.rect.center = self.initial_position
@@ -55,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.update_angle()
         self.update_speed()
 
-        self.image = pygame.transform.rotate(self.image2, self.angle)
+        self.image = pygame.transform.rotate(self.image_copy, self.angle)
         self.rect.x += self.speed
 
     def damage(self):
@@ -83,7 +84,7 @@ class Player(pygame.sprite.Sprite):
 
     def shot_bullet(self):
         self.space_pressed = True
-        bullet = Bullet(self.rect.x + self.image2.get_width() / 2, self.rect.y)
+        bullet = Bullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
         self.bullets_list.add(bullet)
 
 

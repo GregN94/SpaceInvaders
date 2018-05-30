@@ -26,21 +26,22 @@ class PausePanel(pygame.sprite.Sprite):
         self.rect.center = (int(screen_width / 2), int(screen_height / 2))
 
 
-class PauseLogo(pygame.sprite.Sprite):
-    def __init__(self, screen_width, screen_height):
+class Logo(pygame.sprite.Sprite):
+    def __init__(self, screen_width, screen_height, image):
         super().__init__()
-        self.image = pygame.image.load("Images/pause_logo.png")
+        self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(self.image,
                                             [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
         self.rect.center = (int(screen_width / 2), int(screen_height / 2) - 3 * self.image.get_height())
 
 
-class Pause:
-    def __init__(self, screen_width, screen_height):
+class BasicState:
+    def __init__(self, screen_width, screen_height, image):
         self.background = Background(screen_width, screen_height)
-        self.pause_panel = PausePanel(screen_width, screen_height)
-        self.pause_logo = PauseLogo(screen_width, screen_height)
+        self.panel = PausePanel(screen_width, screen_height)
+
+        self.logo = Logo(screen_width, screen_height, image)
         self.resume_button = ResumeButton(screen_width, screen_height)
         self.retry_button = RetryButton(screen_width, screen_height)
         self.go_to_menu_button = GoToMenu(screen_width, screen_height)
@@ -50,14 +51,26 @@ class Pause:
         self.background_sprites_list.add(self.background)
 
         self.panel_sprite_list = pygame.sprite.Group()
-        self.panel_sprite_list.add(self.pause_panel)
+        self.panel_sprite_list.add(self.panel)
 
         self.buttons_sprite_list = pygame.sprite.Group()
-        self.buttons_sprite_list.add(self.pause_logo,
+
+        self.buttons_sprite_list.add(self.logo,
                                      self.exit_button,
-                                     self.resume_button,
                                      self.retry_button,
                                      self.go_to_menu_button)
+
+    def draw(self, screen):
+        self.background_sprites_list.draw(screen)
+        self.panel_sprite_list.draw(screen)
+        self.buttons_sprite_list.draw(screen)
+
+
+class Pause(BasicState):
+    def __init__(self, screen_width, screen_height):
+        super().__init__(screen_width, screen_height, "Images/pause_logo.png")
+        self.resume_button = ResumeButton(screen_width, screen_height)
+        self.buttons_sprite_list.add(self.resume_button)
 
     def update(self):
         new_state = States.PAUSE
@@ -77,9 +90,5 @@ class Pause:
         self.buttons_sprite_list.update()
         return new_state
 
-    def draw(self, screen):
-        self.background_sprites_list.draw(screen)
-        self.panel_sprite_list.draw(screen)
-        self.buttons_sprite_list.draw(screen)
 
 
