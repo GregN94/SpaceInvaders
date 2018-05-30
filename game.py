@@ -40,6 +40,8 @@ class Game:
         self.play_state.draw(self.screen)
 
     def state_menu(self):
+        self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.play_state.generate_enemies()
         self.state = self.menu_state.menu()
         self.menu_state.draw(self.screen)
 

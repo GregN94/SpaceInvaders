@@ -44,9 +44,9 @@ class MenuState:
         self.background_sprite_list = pygame.sprite.Group()
         self.background_sprite_list.add(self.menu_sprite)
         self.menu_sprites_list.add(self.logo_sprite, self.start_button_sprite, self.exit_button_sprite)
-        self.new_state = States.MENU
 
     def menu(self):
+        new_state = States.MENU
         mouse_position = pygame.mouse.get_pos()
         pressed = pygame.mouse.get_pressed()
 
@@ -55,16 +55,16 @@ class MenuState:
 
         if self.start_button_sprite.rect.collidepoint(mouse_position):
             if pressed[0]:
-                self.new_state = States.GAME
+                new_state = States.GAME
             self.start_button_sprite.set_state(ACTIVE)
 
         if self.exit_button_sprite.rect.collidepoint(mouse_position):
             if pressed[0]:
-                self.new_state = States.EXIT
+                new_state = States.EXIT
             self.exit_button_sprite.set_state(ACTIVE)
 
         self.menu_sprites_list.update()
-        return self.new_state
+        return new_state
 
     def draw(self, screen):
         self.background_sprite_list.draw(screen)

@@ -1,5 +1,5 @@
 import pygame
-from buttons import ExitButtonSprite, ResumeButton, RetryButton
+from buttons import ExitButtonSprite, ResumeButton, RetryButton, GoToMenu
 from States.menu_state import States
 
 BLACK = (0, 0, 0)
@@ -43,6 +43,7 @@ class Pause:
         self.pause_logo = PauseLogo(screen_width, screen_height)
         self.resume_button = ResumeButton(screen_width, screen_height)
         self.retry_button = RetryButton(screen_width, screen_height)
+        self.go_to_menu_button = GoToMenu(screen_width, screen_height)
         self.exit_button = ExitButtonSprite(screen_width, screen_height)
 
         self.background_sprites_list = pygame.sprite.Group()
@@ -52,7 +53,11 @@ class Pause:
         self.panel_sprite_list.add(self.pause_panel)
 
         self.buttons_sprite_list = pygame.sprite.Group()
-        self.buttons_sprite_list.add(self.pause_logo, self.exit_button, self.resume_button, self.retry_button)
+        self.buttons_sprite_list.add(self.pause_logo,
+                                     self.exit_button,
+                                     self.resume_button,
+                                     self.retry_button,
+                                     self.go_to_menu_button)
 
     def update(self):
         new_state = States.PAUSE
@@ -65,6 +70,9 @@ class Pause:
 
         if self.retry_button.check():
             new_state = States.RETRY
+
+        if self.go_to_menu_button.check():
+            new_state = States.MENU
 
         self.buttons_sprite_list.update()
         return new_state
