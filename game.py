@@ -9,7 +9,7 @@ SCREEN_HEIGHT = 600
 
 class Game:
     def __init__(self):
-        pygame.mixer.pre_init(44100, -16, 1, 512)
+        pygame.mixer.pre_init(44100, -16, 3, 512)
         pygame.init()
         pygame.mixer.init()
         self.EXIT = False

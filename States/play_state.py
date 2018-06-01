@@ -33,6 +33,8 @@ class PlayState:
         self.generate_enemies()
         self.generate_lives()
         self.state = States.GAME
+        self.shot_sound = pygame.mixer.Sound("Sounds/explosion.ogg")
+        self.shot_sound.set_volume(0.3)
 
     def generate_lives(self):
         for i in range(self.num_of_lives):
@@ -53,6 +55,7 @@ class PlayState:
                                       True,
                                       pygame.sprite.collide_mask):
             self.num_of_enemies -= 1
+            self.shot_sound.play(0, 700, 0)
         if self.num_of_enemies == 0:
             pygame.mixer.music.load("Sounds/win_music")
             pygame.mixer.music.play(-1)
@@ -67,6 +70,7 @@ class PlayState:
                 heart = self.lives.pop()
                 heart.kill()
                 self.player.damage()
+                self.shot_sound.play(0, 700, 0)
             if len(self.lives) == 0:
                 self.player.kill()
                 self.state = States.GAME_OVER
