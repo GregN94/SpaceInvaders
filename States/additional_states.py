@@ -5,6 +5,7 @@ from States.menu_state import States
 BLACK = (0, 0, 0)
 PANEL_SCALE = 3
 SCALE = 2
+WON_IMAGES = ["Images/won_inactive.png", "Images/won_active.png"]
 
 
 class Background(pygame.sprite.Sprite):
@@ -34,6 +35,19 @@ class Logo(pygame.sprite.Sprite):
                                             [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
         self.rect.center = (int(screen_width / 2), int(screen_height / 2) - 3 * self.image.get_height())
+        self.state = 1
+
+    def toggle(self, images):
+        if self.state == 1:
+            self.state = 0
+        else:
+            self.state = 1
+        position = self.rect.center
+        self.image = pygame.image.load(images[self.state])
+        self.image = pygame.transform.scale(self.image,
+                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.rect = self.image.get_rect()
+        self.rect.center = position
 
 
 class BasicState:
@@ -113,9 +127,10 @@ class GameOver(BasicState):
 
 class WinState(BasicState):
     def __init__(self, screen_width, screen_height):
-        super().__init__(screen_width, screen_height, "Images/game_over.png")
+        super().__init__(screen_width, screen_height, WON_IMAGES[0])
 
     def update(self):
+        self.logo.toggle(WON_IMAGES)
         new_state = States.WIN
 
         if self.exit_button.check():
@@ -129,6 +144,9 @@ class WinState(BasicState):
 
         self.buttons_sprite_list.update()
         return new_state
+
+
+
 
 
 
