@@ -54,6 +54,8 @@ class PlayState:
                                       pygame.sprite.collide_mask):
             self.num_of_enemies -= 1
         if self.num_of_enemies == 0:
+            pygame.mixer.music.load("Sounds/win_music")
+            pygame.mixer.music.play(-1)
             self.state = States.WIN
 
     def bullet_player_collision_handler(self):
@@ -68,6 +70,8 @@ class PlayState:
             if len(self.lives) == 0:
                 self.player.kill()
                 self.state = States.GAME_OVER
+                pygame.mixer.music.load("Sounds/game_over_music")
+                pygame.mixer.music.play(-1)
             sprite.kill()
 
     def play(self):

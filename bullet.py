@@ -14,6 +14,8 @@ class BulletsSprites:
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
+        self.shot_sound = pygame.mixer.Sound("Sounds/player_shot.ogg")
+        self.shot_sound.play(0, 400, 0)
         self.image = pygame.image.load("Images/bullet.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
@@ -29,6 +31,8 @@ class Bullet(pygame.sprite.Sprite):
 class EnemyBullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
+        self.shot_sound = pygame.mixer.Sound("Sounds/enemy_shot.ogg")
+        self.shot_sound.play(0, 400, 0)
         self.image = pygame.image.load("Images/enemy_bullet.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()

@@ -96,9 +96,13 @@ class Pause(BasicState):
             new_state = States.GAME
 
         if self.retry_button.check():
+            pygame.mixer.music.load("Sounds/background_music")
+            pygame.mixer.music.play(-1)
             new_state = States.RETRY
 
         if self.go_to_menu_button.check():
+            pygame.mixer.music.load("Sounds/background_music")
+            pygame.mixer.music.play(-1)
             new_state = States.GO_TO_MENU
 
         self.buttons_sprite_list.update()
@@ -116,9 +120,13 @@ class GameOver(BasicState):
             new_state = States.EXIT
 
         if self.retry_button.check():
+            pygame.mixer.music.load("Sounds/background_music")
+            pygame.mixer.music.play(-1)
             new_state = States.RETRY
 
         if self.go_to_menu_button.check():
+            pygame.mixer.music.load("Sounds/background_music")
+            pygame.mixer.music.play(-1)
             new_state = States.GO_TO_MENU
 
         self.buttons_sprite_list.update()

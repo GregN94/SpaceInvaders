@@ -52,6 +52,7 @@ class MenuState:
         new_state = States.MENU
 
         if self.start_button_sprite.check():
+            pygame.mixer.music.play(-1)
             new_state = States.GAME
 
         if self.exit_button_sprite.check():

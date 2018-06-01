@@ -9,7 +9,9 @@ SCREEN_HEIGHT = 600
 
 class Game:
     def __init__(self):
+        pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
+        pygame.mixer.init()
         self.EXIT = False
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
@@ -64,6 +66,10 @@ class Game:
         self.win_state.draw(self.screen)
 
     def main(self):
+
+        pygame.mixer.music.load("Sounds/background_music")
+        pygame.mixer.music.play(-1)
+
         while not self.EXIT:
 
             self.screen.fill((0, 0, 0))
