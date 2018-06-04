@@ -3,6 +3,7 @@ from player import Player, Direction
 from enemy import Enemy
 from bullet import BulletsSprites
 from States.menu_state import States
+from explosion import Explosion
 
 
 NUM_OF_ENEMIES = 10
@@ -49,13 +50,20 @@ class PlayState:
             self.all_sprites_list.add(self.enemies_sprites_list)
 
     def bullet_enemy_collision_handler(self):
-        if pygame.sprite.groupcollide(self.enemies_sprites_list,
-                                      self.bullets_sprites.bullets_list,
-                                      True,
-                                      True,
-                                      pygame.sprite.collide_mask):
+
+        sprite_dict = pygame.sprite.groupcollide(self.enemies_sprites_list,
+                                                 self.bullets_sprites.bullets_list,
+                                                 True,
+                                                 True,
+                                                 pygame.sprite.collide_mask)
+        for sprite in sprite_dict:
+            if sprite_dict[sprite]:
+                explosion = Explosion(sprite.rect.center)
+                self.all_sprites_list.add(explosion)
+
+        if sprite_dict:
             self.num_of_enemies -= 1
-            self.shot_sound.play(0, 700, 0)
+            #self.shot_sound.play(0, 700, 0)
         if self.num_of_enemies == 0:
             pygame.mixer.music.load("Sounds/win_music")
             pygame.mixer.music.play(-1)
