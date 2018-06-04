@@ -19,6 +19,15 @@ class Heart(pygame.sprite.Sprite):
         self.rect.center = (x, y)
 
 
+class Background(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Images/background")
+        self.image = pygame.transform.scale(self.image,
+                                                 [int(dimension / 1.5) for dimension in self.image.get_size()])
+        self.rect = self.image.get_rect()
+
+
 class PlayState:
     def __init__(self, screen_width, screen_height):
         self.num_of_lives = 3
@@ -26,6 +35,10 @@ class PlayState:
         self.num_of_enemies = NUM_OF_ENEMIES
         self.bullets_sprites = BulletsSprites()
         self.player = Player(screen_width, screen_height, self.bullets_sprites.bullets_list)
+
+        self.background = Background()
+        self.background_sprite = pygame.sprite.Group()
+        self.background_sprite.add(self.background)
 
         self.player_explosion_group = pygame.sprite.Group()
         self.all_sprites_list = pygame.sprite.Group()
@@ -129,6 +142,7 @@ class PlayState:
         self.all_sprites_list.update()
 
     def draw(self, screen):
+        self.background_sprite.draw(screen)
         self.all_sprites_list.draw(screen)
         self.player_explosion_group.draw(screen)
 
