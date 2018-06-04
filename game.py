@@ -33,20 +33,20 @@ class Game:
                     elif self.state == States.GAME:
                         self.state = States.PAUSE
 
-    def state_pause(self):
+    def pause(self):
         self.play_state.draw(self.screen)
         self.state = self.pause_state.update()
         self.pause_state.draw(self.screen)
 
-    def state_game(self):
-        self.state = self.play_state.play()
+    def game(self):
+        self.state = self.play_state.update()
         self.play_state.draw(self.screen)
 
-    def state_menu(self):
+    def menu(self):
         self.state = self.menu_state.update()
         self.menu_state.draw(self.screen)
 
-    def state_retry(self):
+    def retry(self):
         self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.state = States.GAME
 
@@ -60,7 +60,7 @@ class Game:
         self.state = self.game_over_state.update()
         self.game_over_state.draw(self.screen)
 
-    def won(self):
+    def victory(self):
         self.play_state.draw(self.screen)
         self.state = self.win_state.update()
         self.win_state.draw(self.screen)
@@ -76,16 +76,16 @@ class Game:
             self.basic_input()
 
             if self.state == States.PAUSE:
-                self.state_pause()
+                self.pause()
 
             if self.state == States.GAME:
-                self.state_game()
+                self.game()
 
             if self.state == States.MENU:
-                self.state_menu()
+                self.menu()
 
             if self.state == States.RETRY:
-                self.state_retry()
+                self.retry()
 
             if self.state == States.GO_TO_MENU:
                 self.go_to_menu()
@@ -94,7 +94,7 @@ class Game:
                 self.game_over()
 
             if self.state == States.WIN:
-                self.won()
+                self.victory()
 
             if self.state == States.EXIT:
                 self.EXIT = True

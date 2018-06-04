@@ -7,8 +7,8 @@ SPEED = 5
 
 class BulletsSprites:
     def __init__(self):
-        self.bullets_list = pygame.sprite.Group()
-        self.enemy_bullets_list = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
+        self.enemy_bullets = pygame.sprite.Group()
 
 
 class Bullet(pygame.sprite.Sprite):
