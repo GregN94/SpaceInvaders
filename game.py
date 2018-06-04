@@ -73,14 +73,14 @@ class Game:
         pygame.mixer.music.load("Sounds/background_music")
         pygame.mixer.music.play(-1)
 
-        do_state = {States.PAUSE: self.pause,
-                    States.GAME: self.game,
-                    States.MENU: self.menu,
-                    States.RETRY: self.retry,
-                    States.GO_TO_MENU: self.go_to_menu,
-                    States.GAME_OVER: self.game_over,
-                    States.WIN: self.victory,
-                    States.EXIT: self.exit}
+        do_state = {States.PAUSE:       self.pause,
+                    States.GAME:        self.game,
+                    States.MENU:        self.menu,
+                    States.RETRY:       self.retry,
+                    States.GO_TO_MENU:  self.go_to_menu,
+                    States.GAME_OVER:   self.game_over,
+                    States.WIN:         self.victory,
+                    States.EXIT:        self.exit}
 
         while not self.EXIT:
 
