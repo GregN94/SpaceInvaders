@@ -65,39 +65,29 @@ class Game:
         self.state = self.win_state.update()
         self.win_state.draw(self.screen)
 
+    def exit(self):
+        self.EXIT = True
+
     def main(self):
 
         pygame.mixer.music.load("Sounds/background_music")
         pygame.mixer.music.play(-1)
+
+        do_state = {States.PAUSE: self.pause,
+                    States.GAME: self.game,
+                    States.MENU: self.menu,
+                    States.RETRY: self.retry,
+                    States.GO_TO_MENU: self.go_to_menu,
+                    States.GAME_OVER: self.game_over,
+                    States.WIN: self.victory,
+                    States.EXIT: self.exit}
 
         while not self.EXIT:
 
             self.screen.fill((0, 0, 0))
             self.basic_input()
 
-            if self.state == States.PAUSE:
-                self.pause()
-
-            if self.state == States.GAME:
-                self.game()
-
-            if self.state == States.MENU:
-                self.menu()
-
-            if self.state == States.RETRY:
-                self.retry()
-
-            if self.state == States.GO_TO_MENU:
-                self.go_to_menu()
-
-            if self.state == States.GAME_OVER:
-                self.game_over()
-
-            if self.state == States.WIN:
-                self.victory()
-
-            if self.state == States.EXIT:
-                self.EXIT = True
+            do_state[self.state]()
 
             pygame.display.update()
             self.clock.tick(60)
