@@ -27,6 +27,7 @@ class PlayState:
         self.bullets_sprites = BulletsSprites()
         self.player = Player(screen_width, screen_height, self.bullets_sprites.bullets_list)
 
+        self.player_explosion_group = pygame.sprite.Group()
         self.all_sprites_list = pygame.sprite.Group()
         self.enemies_sprites_list = pygame.sprite.Group()
         self.pause_sprites_list = pygame.sprite.Group()
@@ -34,8 +35,7 @@ class PlayState:
         self.generate_enemies()
         self.generate_lives()
         self.state = States.GAME
-        self.shot_sound = pygame.mixer.Sound("Sounds/explosion.ogg")
-        self.shot_sound.set_volume(0.3)
+        self.player_hit = False
 
     def generate_lives(self):
         for i in range(self.num_of_lives):
@@ -63,7 +63,6 @@ class PlayState:
 
         if sprite_dict:
             self.num_of_enemies -= 1
-            #self.shot_sound.play(0, 700, 0)
         if self.num_of_enemies == 0:
             pygame.mixer.music.load("Sounds/win_music")
             pygame.mixer.music.play(-1)
@@ -74,19 +73,30 @@ class PlayState:
                                                 self.bullets_sprites.enemy_bullets_list,
                                                 pygame.sprite.collide_mask)
         if sprite:
+            self.player_hit = True
+            sprite.kill()
             if len(self.lives):
                 heart = self.lives.pop()
                 heart.kill()
-                self.player.damage()
-                self.shot_sound.play(0, 700, 0)
-            if len(self.lives) == 0:
-                self.player.kill()
-                self.state = States.GAME_OVER
-                pygame.mixer.music.load("Sounds/game_over_music")
-                pygame.mixer.music.play(-1)
-            sprite.kill()
+                explosion = Explosion(self.player.rect.center)
+                self.player_explosion_group.add(explosion)
 
-    def play(self):
+    def player_took_hit(self):
+
+        self.player_explosion_group.update()
+        if len(self.player_explosion_group.sprites()) == 0:
+            self.player.damage()
+            self.player_hit = False
+        if len(self.lives) == 0:
+            self.player.kill()
+            self.state = States.GAME_OVER
+            pygame.mixer.music.load("Sounds/game_over_music")
+            pygame.mixer.music.play(-1)
+
+        self.enemies_sprites_list.update()
+        self.bullets_sprites.enemy_bullets_list.update()
+
+    def fight_state(self):
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_LEFT]:
             self.player.move(Direction.LEFT)
@@ -106,6 +116,12 @@ class PlayState:
         self.bullet_enemy_collision_handler()
         self.bullet_player_collision_handler()
 
+    def play(self):
+        if self.player_hit:
+            self.player_took_hit()
+        else:
+            self.fight_state()
+
         return self.state
 
     def animation(self):
@@ -114,6 +130,7 @@ class PlayState:
 
     def draw(self, screen):
         self.all_sprites_list.draw(screen)
+        self.player_explosion_group.draw(screen)
 
 
 
