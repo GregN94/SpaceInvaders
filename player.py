@@ -15,20 +15,20 @@ ANGLE_ACCELERATION = SPEED_DAMPING + 1
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, bullets):
         super().__init__()
-        self.space_pressed = False
+        self.angle = 0
+        self.speed = 0
+        self.bullets = bullets
         self.image = pygame.image.load("Images/space_ship.png")
         self.image = pygame.transform.scale(self.image,
                                             [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.image_copy = self.image.copy()
         self.rect = self.image.get_rect()
-        self.initial_position = (int(x / 2), y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
+        self.initial_position = (int(x / 2),
+                                 y - int(self.image.get_height() / 2) - 2 * POSITION_OFFSET)
         self.rect.center = self.initial_position
         self.mask = pygame.mask.from_surface(self.image)
         self.bounds = [POSITION_OFFSET,
                        x - self.image.get_width() - POSITION_OFFSET]
-        self.angle = 0
-        self.speed = 0
-        self.bullets = bullets
 
     def decrease_angle(self):
         if self.angle > 0:
@@ -67,8 +67,6 @@ class Player(pygame.sprite.Sprite):
             self.angle -= ANGLE_ACCELERATION
 
     def shot_bullet(self):
-        if not self.space_pressed:
-            self.space_pressed = True
             bullet = Bullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
             self.bullets.add(bullet)
 

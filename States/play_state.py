@@ -10,11 +10,12 @@ NUM_OF_ENEMIES = 10
 SCALE = 4
 
 
-class Live(pygame.sprite.Sprite):
+class Life(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image = pygame.image.load("Images/heart.png")
-        self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image = pygame.transform.scale(self.image,
+                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
@@ -24,7 +25,7 @@ class Background(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load("Images/background")
         self.image = pygame.transform.scale(self.image,
-                                                 [int(dimension / 1.5) for dimension in self.image.get_size()])
+                                            [int(dimension / 1.5) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
 
 
@@ -53,20 +54,29 @@ class PlayState:
 
         self.state = States.GAME
         self.player_hit = False
+        self.space_pressed = False
 
     def generate_lives(self):
         for i in range(self.num_of_lives):
-            heart = Live(40 + i * 80, 40)
+            heart = Life(40 + i * 80, 40)
             self.lives.append(heart)
             self.all_sprites.add(heart)
 
     def generate_enemies(self):
         for i in range(self.num_of_enemies):
-            enemy = Enemy((i + 1) * 80, 100, self.bullets_sprites.enemy_bullets)
+            enemy = Enemy((i + 1) * 80,
+                          100,
+                          self.bullets_sprites.enemy_bullets)
             self.enemies_sprites.add(enemy)
             self.all_sprites.add(self.enemies_sprites)
 
-    def bullet_enemy_collision(self):
+    def check_if_won(self):
+        if self.num_of_enemies == 0:
+            pygame.mixer.music.load("Sounds/win_music")
+            pygame.mixer.music.play(-1)
+            self.state = States.WIN
+
+    def check_collision_bullets_enemies(self):
 
         sprite_dict = pygame.sprite.groupcollide(self.enemies_sprites,
                                                  self.bullets_sprites.bullets,
@@ -77,16 +87,9 @@ class PlayState:
             if sprite_dict[sprite]:
                 explosion = Explosion(sprite.rect.center)
                 self.all_sprites.add(explosion)
+                self.num_of_enemies -= 1
 
-        if sprite_dict:
-            self.num_of_enemies -= 1
-
-        if self.num_of_enemies == 0:
-            pygame.mixer.music.load("Sounds/win_music")
-            pygame.mixer.music.play(-1)
-            self.state = States.WIN
-
-    def bullet_player_collision(self):
+    def check_collision_bullets_player(self):
         bullet = pygame.sprite.spritecollideany(self.player,
                                                 self.bullets_sprites.enemy_bullets,
                                                 pygame.sprite.collide_mask)
@@ -99,22 +102,14 @@ class PlayState:
                 explosion = Explosion(self.player.rect.center)
                 self.player_explosion_sprite.add(explosion)
 
-    def player_got_hit_state(self):
-
-        self.player_explosion_sprite.update()
-        if len(self.player_explosion_sprite.sprites()) == 0:
-            self.player.go_to_initial_position()
-            self.player_hit = False
+    def check_if_game_over(self):
         if len(self.lives) == 0:
             self.player.kill()
             self.state = States.GAME_OVER
             pygame.mixer.music.load("Sounds/game_over_music")
             pygame.mixer.music.play(-1)
 
-        self.enemies_sprites.update()
-        self.bullets_sprites.enemy_bullets.update()
-
-    def fight_state(self):
+    def control_player(self):
         pressed = pygame.key.get_pressed()
 
         if pressed[pygame.K_LEFT]:
@@ -123,26 +118,12 @@ class PlayState:
         if pressed[pygame.K_RIGHT]:
             self.player.move_right()
 
-        if pressed[pygame.K_SPACE]:
+        if pressed[pygame.K_SPACE] and not self.space_pressed:
+            self.space_pressed = True
             self.player.shot_bullet()
 
         if not pressed[pygame.K_SPACE]:
-            self.player.space_pressed = False
-
-        self.all_sprites.add(self.bullets_sprites.bullets,
-                             self.bullets_sprites.enemy_bullets)
-        self.all_sprites.update()
-
-        self.bullet_enemy_collision()
-        self.bullet_player_collision()
-
-    def update(self):
-        if self.player_hit:
-            self.player_got_hit_state()
-        else:
-            self.fight_state()
-
-        return self.state
+            self.space_pressed = False
 
     def animation(self):
         self.all_sprites.add(self.bullets_sprites.enemy_bullets)
@@ -153,5 +134,34 @@ class PlayState:
         self.all_sprites.draw(screen)
         self.player_explosion_sprite.draw(screen)
 
+    def player_got_hit_state(self):
+
+        self.player_explosion_sprite.update()
+        if len(self.player_explosion_sprite.sprites()) == 0:
+            self.player.go_to_initial_position()
+            self.player_hit = False
+
+        self.enemies_sprites.update()
+        self.bullets_sprites.enemy_bullets.update()
+
+    def fight_state(self):
+        self.control_player()
+
+        self.all_sprites.add(self.bullets_sprites.bullets,
+                             self.bullets_sprites.enemy_bullets)
+        self.all_sprites.update()
+
+        self.check_collision_bullets_player()
+        self.check_collision_bullets_enemies()
+        self.check_if_won()
+        self.check_if_game_over()
+
+    def update(self):
+        if self.player_hit:
+            self.player_got_hit_state()
+        else:
+            self.fight_state()
+
+        return self.state
 
 
