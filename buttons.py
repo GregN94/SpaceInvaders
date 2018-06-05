@@ -1,4 +1,5 @@
 import pygame
+import utils
 
 INACTIVE = 0
 ACTIVE = 1
@@ -16,17 +17,13 @@ class Button(pygame.sprite.Sprite):
     def __init__(self, images, x=0, y=0):
         super().__init__()
         self.images = images
-        self.image = pygame.image.load(images[INACTIVE])
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / BUTTON_SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale(self.images[INACTIVE], BUTTON_SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
     def set_state(self, state):
         position = self.rect.center
-        self.image = pygame.image.load(self.images[state])
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / BUTTON_SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale(self.images[state], BUTTON_SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = position
 
