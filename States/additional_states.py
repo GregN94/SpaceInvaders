@@ -1,4 +1,5 @@
 import pygame
+import utils
 from buttons import ExitButtonSprite, ResumeButton, RetryButton, GoToMenu
 from States.menu_state import States
 
@@ -20,9 +21,7 @@ class Background(pygame.sprite.Sprite):
 class PausePanel(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__()
-        self.image = pygame.image.load("Images/pause_panel.png")
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / PANEL_SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale("Images/pause_panel.png", PANEL_SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (int(screen_width / 2), int(screen_height / 2))
 
@@ -30,9 +29,7 @@ class PausePanel(pygame.sprite.Sprite):
 class Logo(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height, image):
         super().__init__()
-        self.image = pygame.image.load(image)
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale(image, SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (int(screen_width / 2), int(screen_height / 2) - 3 * self.image.get_height())
         self.state = 1
@@ -43,9 +40,7 @@ class Logo(pygame.sprite.Sprite):
         else:
             self.state = 1
         position = self.rect.center
-        self.image = pygame.image.load(images[self.state])
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale(images[self.state], SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = position
 

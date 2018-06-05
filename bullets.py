@@ -1,4 +1,5 @@
 import pygame
+import utils
 
 SCALE = 10
 POSITION_OFFSET = 10
@@ -17,8 +18,7 @@ class Bullet(pygame.sprite.Sprite):
         self.shot_sound = pygame.mixer.Sound("Sounds/player_shot.ogg")
         self.shot_sound.set_volume(0.3)
         self.shot_sound.play(0, 400, 0)
-        self.image = pygame.image.load(image)
-        self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale(image, SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
         self.mask = pygame.mask.from_surface(self.image)

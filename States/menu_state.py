@@ -1,4 +1,5 @@
 import pygame
+import utils
 from enum import Enum
 from buttons import StartButtonSprite, ExitButtonSprite
 
@@ -29,9 +30,7 @@ class MenuBackground(pygame.sprite.Sprite):
 class LogoSprite(pygame.sprite.Sprite):
     def __init__(self, screen_width):
         super().__init__()
-        self.image = pygame.image.load("Images/menu_logo.png")
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / LOGO_SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale("Images/menu_logo.png", LOGO_SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (int(screen_width / 2), int(self.image.get_height() / 2))
 

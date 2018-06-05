@@ -1,4 +1,5 @@
 import pygame
+import utils
 from bullets import PlayerBullet
 
 SCALE = 5
@@ -17,9 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
         self.speed = 0
         self.bullets = bullets
-        self.image = pygame.image.load("Images/space_ship.png")
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale("Images/space_ship.png", SCALE)
         self.image_copy = self.image.copy()
         self.rect = self.image.get_rect()
         self.initial_position = (int(x / 2),

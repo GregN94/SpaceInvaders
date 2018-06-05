@@ -1,4 +1,5 @@
 import pygame
+import utils
 from player import Player
 from enemy import Enemy
 from bullets import BulletsSprites
@@ -8,14 +9,13 @@ from explosion import Explosion
 
 NUM_OF_ENEMIES = 10
 SCALE = 4
+BACKGROUND_SCALE = 1.5
 
 
 class Life(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load("Images/heart.png")
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / SCALE) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale("Images/heart.png", SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
@@ -23,16 +23,16 @@ class Life(pygame.sprite.Sprite):
 class Background(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("Images/background")
-        self.image = pygame.transform.scale(self.image,
-                                            [int(dimension / 1.5) for dimension in self.image.get_size()])
+        self.image = utils.load_and_scale("Images/background", BACKGROUND_SCALE)
         self.rect = self.image.get_rect()
 
 
 class PlayState:
     def __init__(self, screen_width, screen_height):
         self.bullets_sprites = BulletsSprites()
-        self.player = Player(screen_width, screen_height, self.bullets_sprites.bullets)
+        self.player = Player(screen_width,
+                             screen_height,
+                             self.bullets_sprites.bullets)
 
         self.background = Background()
         self.background_sprite = pygame.sprite.Group()
