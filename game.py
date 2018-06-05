@@ -1,10 +1,10 @@
 import pygame
 from States.play_state import PlayState
 from States.menu_state import MenuState, States
-from States.additional_states import Pause, GameOver, WinState
+from States.additional_states import Pause, GameOver, WinState, WonLevel
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 600
+SCREEN = (1000, 600)
+FIRST_LEVEL = 1
 
 
 class Game:
@@ -12,14 +12,16 @@ class Game:
         pygame.mixer.pre_init(44100, -16, 3, 512)
         pygame.init()
         pygame.mixer.init()
+        self.level = FIRST_LEVEL
         self.EXIT = False
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = pygame.display.set_mode(SCREEN)
         self.clock = pygame.time.Clock()
-        self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.menu_state = MenuState(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.pause_state = Pause(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.game_over_state = GameOver(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.win_state = WinState(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.win_state = WinState(SCREEN)
+        self.pause_state = Pause(SCREEN)
+        self.menu_state = MenuState(SCREEN)
+        self.won_level_state = WonLevel(SCREEN)
+        self.game_over_state = GameOver(SCREEN)
+        self.play_state = PlayState(SCREEN, self.level)
         self.state = States.MENU
 
     def basic_input(self):
@@ -47,11 +49,13 @@ class Game:
         self.menu_state.draw(self.screen)
 
     def retry(self):
-        self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.level = FIRST_LEVEL
+        self.play_state = PlayState(SCREEN, self.level)
         self.state = States.GAME
 
     def go_to_menu(self):
-        self.play_state = PlayState(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.level = FIRST_LEVEL
+        self.play_state = PlayState(SCREEN, self.level)
         self.state = States.MENU
 
     def game_over(self):
@@ -59,6 +63,17 @@ class Game:
         self.play_state.draw(self.screen)
         self.state = self.game_over_state.update()
         self.game_over_state.draw(self.screen)
+
+    def won_level(self):
+        self.play_state.animation()
+        self.play_state.draw(self.screen)
+        self.state = self.won_level_state.update()
+        self.won_level_state.draw(self.screen)
+
+    def next_level(self):
+        self.level += 1
+        self.play_state = PlayState(SCREEN, self.level)
+        self.state = States.GAME
 
     def victory(self):
         self.play_state.draw(self.screen)
@@ -79,8 +94,10 @@ class Game:
                     States.RETRY:       self.retry,
                     States.GO_TO_MENU:  self.go_to_menu,
                     States.GAME_OVER:   self.game_over,
-                    States.WIN:         self.victory,
-                    States.EXIT:        self.exit}
+                    States.VICTORY:     self.victory,
+                    States.EXIT:        self.exit,
+                    States.WON_LEVEL:   self.won_level,
+                    States.NEXT_LEVEL:  self.next_level}
 
         while not self.EXIT:
 
@@ -95,3 +112,5 @@ class Game:
 
 game = Game()
 game.main()
+pygame.quit()
+quit()

@@ -8,9 +8,10 @@ from States.menu_state import States
 from explosion import Explosion
 
 
-NUM_OF_ENEMIES = 23
+NUM_OF_ENEMIES_PER_LVL = 4
 SCALE = 4
 BACKGROUND_SCALE = 1.5
+MAX_LVL = 9
 
 
 class Life(pygame.sprite.Sprite):
@@ -29,12 +30,13 @@ class Background(pygame.sprite.Sprite):
 
 
 class PlayState:
-    def __init__(self, screen_width, screen_height):
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+    def __init__(self, screen, level):
+        self.level = level
+        self.screen_width = screen[0]
+        self.screen_height = screen[1]
         self.bullets_sprites = BulletsSprites()
-        self.player = Player(screen_width,
-                             screen_height,
+        self.player = Player(self.screen_width,
+                             self.screen_height,
                              self.bullets_sprites.bullets)
 
         self.background = Background()
@@ -47,7 +49,7 @@ class PlayState:
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
 
-        self.num_of_enemies = NUM_OF_ENEMIES
+        self.num_of_enemies = NUM_OF_ENEMIES_PER_LVL * self.level
         self.enemies_sprites = pygame.sprite.Group()
         self.generate_enemies()
 
@@ -118,9 +120,11 @@ class PlayState:
 
     def check_if_won(self):
         if self.num_of_enemies == 0:
-            pygame.mixer.music.load("Sounds/win_music")
-            pygame.mixer.music.play(-1)
-            self.state = States.WIN
+            if self.level == MAX_LVL:
+                pygame.mixer.music.load("Sounds/win_music")
+                pygame.mixer.music.play(-1)
+                self.state = States.VICTORY
+            self.state = States.WON_LEVEL
 
     def check_if_game_over(self):
         if len(self.lives) == 0:

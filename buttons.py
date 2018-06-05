@@ -11,6 +11,7 @@ EXIT_BUTTONS = ["Images/Buttons/exit_button_inactive.png", "Images/Buttons/exit_
 RESUME_BUTTONS = ["Images/Buttons/resume_button_inactive.png", "Images/Buttons/resume_button_active.png"]
 RETRY_BUTTONS = ["Images/Buttons/retry_button_inactive.png", "Images/Buttons/retry_button_active.png"]
 GO_TO_MENU_BUTTONS = ["Images/Buttons/go_to_menu_inactive.png", "Images/Buttons/go_to_menu_active.png"]
+NEXT_LEVEL_BUTTONS = ["Images/Buttons/next_level_inactive.png", "Images/Buttons/next_level_active.png"]
 
 
 class Button(pygame.sprite.Sprite):
@@ -36,29 +37,34 @@ class Button(pygame.sprite.Sprite):
         return False
 
 
-class StartButtonSprite(Button):
-    def __init__(self, screen_width, screen_height):
-        super().__init__(START_BUTTONS, int(screen_width / 2), int(screen_height / 2))
+class StartButton(Button):
+    def __init__(self, screen):
+        super().__init__(START_BUTTONS, int(screen[0] / 2), int(screen[1] / 2))
 
 
-class ExitButtonSprite(Button):
-    def __init__(self, screen_width, screen_height):
-        super().__init__(EXIT_BUTTONS, int(screen_width / 2), int(screen_height / 1.5))
+class ExitButton(Button):
+    def __init__(self, screen):
+        super().__init__(EXIT_BUTTONS, int(screen[0] / 2), int(screen[1] / 1.5))
 
 
 class ResumeButton(Button):
-    def __init__(self, screen_width, screen_height):
-        super().__init__(RESUME_BUTTONS, int(screen_width / 2), int(screen_height / 1.5) - 3 * OFFSET)
+    def __init__(self, screen):
+        super().__init__(RESUME_BUTTONS, int(screen[0] / 2), int(screen[1] / 1.5) - 3 * OFFSET)
+
+
+class NextLevelButton(Button):
+    def __init__(self, screen):
+        super().__init__(NEXT_LEVEL_BUTTONS, int(screen[0] / 2), int(screen[1] / 1.5) - 3 * OFFSET)
 
 
 class RetryButton(Button):
-    def __init__(self, screen_width, screen_height):
-        super().__init__(RETRY_BUTTONS, int(screen_width / 2), int(screen_height / 1.5) - 2 * OFFSET)
+    def __init__(self, screen):
+        super().__init__(RETRY_BUTTONS, int(screen[0] / 2), int(screen[1] / 1.5) - 2 * OFFSET)
 
 
-class GoToMenu(Button):
-    def __init__(self, screen_width, screen_height):
-        super().__init__(GO_TO_MENU_BUTTONS, int(screen_width / 2), int(screen_height / 1.5) - OFFSET)
+class GoToMenuButton(Button):
+    def __init__(self, screen):
+        super().__init__(GO_TO_MENU_BUTTONS, int(screen[0] / 2), int(screen[1] / 1.5) - OFFSET)
 
 
 
