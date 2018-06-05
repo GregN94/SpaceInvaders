@@ -1,5 +1,6 @@
 import pygame
 import utils
+import math
 from player import Player
 from enemy import Enemy
 from bullets import BulletsSprites
@@ -7,7 +8,7 @@ from States.menu_state import States
 from explosion import Explosion
 
 
-NUM_OF_ENEMIES = 10
+NUM_OF_ENEMIES = 23
 SCALE = 4
 BACKGROUND_SCALE = 1.5
 
@@ -29,6 +30,8 @@ class Background(pygame.sprite.Sprite):
 
 class PlayState:
     def __init__(self, screen_width, screen_height):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
         self.bullets_sprites = BulletsSprites()
         self.player = Player(screen_width,
                              screen_height,
@@ -63,18 +66,29 @@ class PlayState:
             self.all_sprites.add(heart)
 
     def generate_enemies(self):
+        rows = math.ceil(self.num_of_enemies / 10)
+        enemy_per_row = math.ceil(self.num_of_enemies / rows)
+        enemy_in_row = 0
+        row = 1
         for i in range(self.num_of_enemies):
-            enemy = Enemy((i + 1) * 80,
-                          100,
-                          self.bullets_sprites.enemy_bullets)
+            if enemy_in_row + 1 > enemy_per_row:
+                row += 1
+                enemy_in_row = 0
+            direction = 1
+            if row % 2:
+                width = (enemy_in_row + 1) * 80
+                height = row * 100
+            else:
+                width = self.screen_width - ((enemy_per_row - enemy_in_row) * 80)
+                height = row * 100
+                direction = -1
+            enemy_in_row += 1
+            enemy = Enemy(width,
+                          height,
+                          self.bullets_sprites.enemy_bullets,
+                          direction)
             self.enemies_sprites.add(enemy)
             self.all_sprites.add(self.enemies_sprites)
-
-    def check_if_won(self):
-        if self.num_of_enemies == 0:
-            pygame.mixer.music.load("Sounds/win_music")
-            pygame.mixer.music.play(-1)
-            self.state = States.WIN
 
     def check_collision_bullets_enemies(self):
 
@@ -101,6 +115,12 @@ class PlayState:
                 heart.kill()
                 explosion = Explosion(self.player.rect.center)
                 self.player_explosion_sprite.add(explosion)
+
+    def check_if_won(self):
+        if self.num_of_enemies == 0:
+            pygame.mixer.music.load("Sounds/win_music")
+            pygame.mixer.music.play(-1)
+            self.state = States.WIN
 
     def check_if_game_over(self):
         if len(self.lives) == 0:
