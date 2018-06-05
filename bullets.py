@@ -3,7 +3,7 @@ import utils
 
 SCALE = 10
 POSITION_OFFSET = 10
-SPEED = 5
+SPEED = 6
 
 
 class BulletsSprites:

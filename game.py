@@ -46,7 +46,7 @@ class Game:
         font = pygame.font.Font(None, 48)
         text = font.render("Level: " + str(self.level), True, (255, 255, 255))
         self.screen.blit(text,
-                         (SCREEN[0] - text.get_width(), SCREEN[1] - text.get_height()))
+                         (SCREEN[0] - text.get_width() - 10, 10))
 
     def menu(self):
         self.state = self.menu_state.update()

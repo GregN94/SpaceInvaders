@@ -9,7 +9,7 @@ from explosion import Explosion
 
 
 NUM_OF_ENEMIES_PER_LVL = 4
-SCALE = 4
+SCALE = 6
 BACKGROUND_SCALE = 1.5
 MAX_LVL = 9
 
@@ -63,7 +63,7 @@ class PlayState:
 
     def generate_lives(self):
         for i in range(self.num_of_lives):
-            heart = Life(40 + i * 80, 40)
+            heart = Life(30 + i * 45, 20)
             self.lives.append(heart)
             self.all_sprites.add(heart)
 
@@ -79,10 +79,10 @@ class PlayState:
             direction = 1
             if row % 2:
                 width = (enemy_in_row + 1) * 80
-                height = row * 100
+                height = 70 + row * 55
             else:
                 width = self.screen_width - ((enemy_per_row - enemy_in_row) * 80)
-                height = row * 100
+                height = 70 + row * 55
                 direction = -1
             enemy_in_row += 1
             enemy = Enemy(width,
