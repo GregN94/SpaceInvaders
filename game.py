@@ -43,6 +43,10 @@ class Game:
     def game(self):
         self.state = self.play_state.update()
         self.play_state.draw(self.screen)
+        font = pygame.font.Font(None, 48)
+        text = font.render("Level: " + str(self.level), True, (255, 255, 255))
+        self.screen.blit(text,
+                         (SCREEN[0] - text.get_width(), SCREEN[1] - text.get_height()))
 
     def menu(self):
         self.state = self.menu_state.update()
@@ -105,7 +109,6 @@ class Game:
             self.basic_input()
 
             do_state[self.state]()
-
             pygame.display.update()
             self.clock.tick(60)
 
