@@ -1,6 +1,6 @@
 import pygame
 import random
-from bullet import EnemyBullet
+from bullets import EnemyBullet
 
 SCALE = 6
 POSITION_OFFSET = 10

@@ -1,7 +1,7 @@
 import pygame
 from player import Player
 from enemy import Enemy
-from bullet import BulletsSprites
+from bullets import BulletsSprites
 from States.menu_state import States
 from explosion import Explosion
 

@@ -1,6 +1,5 @@
 import pygame
-from enum import Enum
-from bullet import Bullet
+from bullets import PlayerBullet
 
 SCALE = 5
 POSITION_OFFSET = 10
@@ -67,7 +66,7 @@ class Player(pygame.sprite.Sprite):
             self.angle -= ANGLE_ACCELERATION
 
     def shot_bullet(self):
-            bullet = Bullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
+            bullet = PlayerBullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
             self.bullets.add(bullet)
 
 

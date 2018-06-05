@@ -12,16 +12,21 @@ class BulletsSprites:
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, image):
         super().__init__()
         self.shot_sound = pygame.mixer.Sound("Sounds/player_shot.ogg")
         self.shot_sound.set_volume(0.3)
         self.shot_sound.play(0, 400, 0)
-        self.image = pygame.image.load("Images/bullet.png").convert_alpha()
+        self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
         self.mask = pygame.mask.from_surface(self.image)
+
+
+class PlayerBullet(Bullet):
+    def __init__(self, x, y):
+        super().__init__(x, y, "Images/bullet.png")
 
     def update(self):
         self.rect.y -= SPEED
@@ -29,17 +34,9 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
 
-class EnemyBullet(pygame.sprite.Sprite):
+class EnemyBullet(Bullet):
     def __init__(self, x, y):
-        super().__init__()
-        self.shot_sound = pygame.mixer.Sound("Sounds/enemy_shot.ogg")
-        self.shot_sound.set_volume(0.3)
-        self.shot_sound.play(0, 400, 0)
-        self.image = pygame.image.load("Images/enemy_bullet.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, [int(dimension / SCALE) for dimension in self.image.get_size()])
-        self.rect = self.image.get_rect()
-        self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
-        self.mask = pygame.mask.from_surface(self.image)
+        super().__init__(x, y, "Images/enemy_bullet.png")
 
     def update(self):
         self.rect.y += SPEED
