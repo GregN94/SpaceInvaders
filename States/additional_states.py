@@ -46,7 +46,7 @@ class Logo(pygame.sprite.Sprite):
 
 
 class BasicState:
-    def __init__(self, screen, image):
+    def __init__(self, screen, image, state):
         self.logo = Logo(screen, image)
         self.retry_button = RetryButton(screen)
         self.go_to_menu_button = GoToMenuButton(screen)
@@ -63,114 +63,73 @@ class BasicState:
                                      self.exit_button,
                                      self.retry_button,
                                      self.go_to_menu_button)
+        self.init_state = state
+        self.new_state = self.init_state
 
     def draw(self, screen):
         self.background_sprites_list.draw(screen)
         self.panel_sprite_list.draw(screen)
         self.buttons_sprite_list.draw(screen)
 
+    def update(self):
+        self.new_state = self.init_state
+        if self.exit_button.check():
+            self.new_state = States.EXIT
+
+        if self.retry_button.check():
+            pygame.mixer.music.load("Sounds/background_music")
+            pygame.mixer.music.play(-1)
+            self.new_state = States.RETRY
+
+        if self.go_to_menu_button.check():
+            pygame.mixer.music.load("Sounds/background_music")
+            pygame.mixer.music.play(-1)
+            self.new_state = States.GO_TO_MENU
+
+        self.buttons_sprite_list.update()
+        return self.new_state
+
 
 class Pause(BasicState):
     def __init__(self, screen):
-        super().__init__(screen, "Images/pause_logo.png")
+        super().__init__(screen, "Images/pause_logo.png", States.PAUSE)
         self.resume_button = ResumeButton(screen)
         self.buttons_sprite_list.add(self.resume_button)
 
     def update(self):
-        new_state = States.PAUSE
-
-        if self.exit_button.check():
-            new_state = States.EXIT
-
+        super().update()
         if self.resume_button.check():
-            new_state = States.GAME
-
-        if self.retry_button.check():
-            pygame.mixer.music.load("Sounds/background_music")
-            pygame.mixer.music.play(-1)
-            new_state = States.RETRY
-
-        if self.go_to_menu_button.check():
-            pygame.mixer.music.load("Sounds/background_music")
-            pygame.mixer.music.play(-1)
-            new_state = States.GO_TO_MENU
+            self.new_state = States.GAME
 
         self.buttons_sprite_list.update()
-        return new_state
-
-
-class GameOver(BasicState):
-    def __init__(self, screen):
-        super().__init__(screen, "Images/game_over.png")
-
-    def update(self):
-        new_state = States.GAME_OVER
-
-        if self.exit_button.check():
-            new_state = States.EXIT
-
-        if self.retry_button.check():
-            pygame.mixer.music.load("Sounds/background_music")
-            pygame.mixer.music.play(-1)
-            new_state = States.RETRY
-
-        if self.go_to_menu_button.check():
-            pygame.mixer.music.load("Sounds/background_music")
-            pygame.mixer.music.play(-1)
-            new_state = States.GO_TO_MENU
-
-        self.buttons_sprite_list.update()
-        return new_state
+        return self.new_state
 
 
 class WonLevel(BasicState):
     def __init__(self, screen):
-        super().__init__(screen, "Images/level_finished.png")
+        super().__init__(screen, "Images/level_finished.png", States.WON_LEVEL)
         self.next_level_button = NextLevelButton(screen)
         self.buttons_sprite_list.add(self.next_level_button)
 
     def update(self):
-        new_state = States.WON_LEVEL
-
-        if self.exit_button.check():
-            new_state = States.EXIT
-
+        super().update()
         if self.next_level_button.check():
-            new_state = States.NEXT_LEVEL
-
-        if self.retry_button.check():
-            pygame.mixer.music.load("Sounds/background_music")
-            pygame.mixer.music.play(-1)
-            new_state = States.RETRY
-
-        if self.go_to_menu_button.check():
-            pygame.mixer.music.load("Sounds/background_music")
-            pygame.mixer.music.play(-1)
-            new_state = States.GO_TO_MENU
+            self.new_state = States.NEXT_LEVEL
 
         self.buttons_sprite_list.update()
-        return new_state
+        return self.new_state
 
 
 class WinState(BasicState):
     def __init__(self, screen):
-        super().__init__(screen, WON_IMAGES[0])
+        super().__init__(screen, WON_IMAGES[0], States.VICTORY)
 
     def update(self):
         self.logo.toggle(WON_IMAGES)
-        new_state = States.VICTORY
-
-        if self.exit_button.check():
-            new_state = States.EXIT
-
-        if self.retry_button.check():
-            new_state = States.RETRY
-
-        if self.go_to_menu_button.check():
-            new_state = States.GO_TO_MENU
+        super().update()
 
         self.buttons_sprite_list.update()
-        return new_state
+        return self.new_state
 
 
 

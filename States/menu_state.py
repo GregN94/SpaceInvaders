@@ -34,7 +34,8 @@ class LogoSprite(pygame.sprite.Sprite):
         super().__init__()
         self.image = utils.load_and_scale("Images/menu_logo.png", LOGO_SCALE)
         self.rect = self.image.get_rect()
-        self.rect.center = (int(screen_width / 2), int(self.image.get_height() / 2))
+        self.rect.center = (int(screen_width / 2),
+                            int(self.image.get_height() / 2))
 
 
 class MenuState:
@@ -46,7 +47,9 @@ class MenuState:
         self.background.add(MenuBackground(screen))
 
         self.menu_sprites = pygame.sprite.Group()
-        self.menu_sprites.add(LogoSprite(screen[0]), self.start_button, self.exit_button)
+        self.menu_sprites.add(LogoSprite(screen[0]),
+                              self.start_button,
+                              self.exit_button)
 
     def update(self):
         new_state = States.MENU

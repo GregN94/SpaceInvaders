@@ -1,7 +1,7 @@
 import pygame
 from States.play_state import PlayState
 from States.menu_state import MenuState, States
-from States.additional_states import Pause, GameOver, WinState, WonLevel
+from States.additional_states import Pause, BasicState, WinState, WonLevel
 
 SCREEN = (1000, 600)
 FIRST_LEVEL = 1
@@ -20,7 +20,7 @@ class Game:
         self.pause_state = Pause(SCREEN)
         self.menu_state = MenuState(SCREEN)
         self.won_level_state = WonLevel(SCREEN)
-        self.game_over_state = GameOver(SCREEN)
+        self.game_over_state = BasicState(SCREEN, "Images/game_over.png", States.GAME_OVER)
         self.play_state = PlayState(SCREEN, self.level)
         self.state = States.MENU
 
@@ -35,6 +35,12 @@ class Game:
                     elif self.state == States.GAME:
                         self.state = States.PAUSE
 
+    def print_level(self):
+        font = pygame.font.Font(None, 48)
+        text = font.render("Level: " + str(self.level), True, (255, 255, 255))
+        self.screen.blit(text,
+                         (SCREEN[0] - text.get_width() - 10, 10))
+
     def pause(self):
         self.play_state.draw(self.screen)
         self.state = self.pause_state.update()
@@ -43,10 +49,7 @@ class Game:
     def game(self):
         self.state = self.play_state.update()
         self.play_state.draw(self.screen)
-        font = pygame.font.Font(None, 48)
-        text = font.render("Level: " + str(self.level), True, (255, 255, 255))
-        self.screen.blit(text,
-                         (SCREEN[0] - text.get_width() - 10, 10))
+        self.print_level()
 
     def menu(self):
         self.state = self.menu_state.update()
