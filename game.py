@@ -12,7 +12,7 @@ class Game:
         pygame.mixer.pre_init(44100, -16, 3, 512)
         pygame.init()
         pygame.mixer.init()
-        self.level = FIRST_LEVEL
+        self.level = 6
         self.EXIT = False
         self.screen = pygame.display.set_mode(SCREEN)
         self.clock = pygame.time.Clock()
