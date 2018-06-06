@@ -1,4 +1,5 @@
 import pygame
+from utils import WaitTimer
 from States.play_state import PlayState
 from States.menu_state import MenuState, States
 from States.additional_states import Pause, BasicState, WinState, WonLevel
@@ -21,7 +22,8 @@ class Game:
         self.menu_state = MenuState(SCREEN)
         self.won_level_state = WonLevel(SCREEN)
         self.game_over_state = BasicState(SCREEN, "Images/game_over.png", States.GAME_OVER)
-        self.play_state = PlayState(SCREEN, self.level)
+        self.timer = WaitTimer()
+        self.play_state = PlayState(SCREEN, self.level, self.timer)
         self.state = States.MENU
 
     def basic_input(self):
@@ -50,6 +52,7 @@ class Game:
         self.state = self.play_state.update()
         self.play_state.draw(self.screen)
         self.print_level()
+        self.timer.update()
         self.play_state.print_wait(self.screen)
 
     def menu(self):
@@ -58,12 +61,12 @@ class Game:
 
     def retry(self):
         self.level = FIRST_LEVEL
-        self.play_state = PlayState(SCREEN, self.level)
+        self.play_state = PlayState(SCREEN, self.level, self.timer)
         self.state = States.GAME
 
     def go_to_menu(self):
         self.level = FIRST_LEVEL
-        self.play_state = PlayState(SCREEN, self.level)
+        self.play_state = PlayState(SCREEN, self.level, self.timer)
         self.state = States.MENU
 
     def game_over(self):
@@ -80,7 +83,7 @@ class Game:
 
     def next_level(self):
         self.level += 1
-        self.play_state = PlayState(SCREEN, self.level)
+        self.play_state = PlayState(SCREEN, self.level, self.timer)
         self.state = States.GAME
 
     def victory(self):
