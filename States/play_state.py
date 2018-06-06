@@ -5,12 +5,9 @@ from player import Player
 from States.menu_state import States
 from explosion import Explosion
 
-
 NUM_OF_ENEMIES_PER_LVL = 4
 BACKGROUND_SCALE = 1.5
 MAX_LVL = 9
-DO_NOT_SHOT_TIME_INIT = 60
-DO_NOT_SHOT_TIME = 120
 
 
 class Background(pygame.sprite.Sprite):
