@@ -30,8 +30,7 @@ class PlayState:
         self.enemy_bullets = pygame.sprite.Group()
         self.player = Player(self.screen_width,
                              self.screen_height,
-                             self.player_bullets,
-                             self.timer)
+                             self.player_bullets)
 
         self.background_sprite = pygame.sprite.Group()
         self.background_sprite.add(Background())
@@ -114,20 +113,20 @@ class PlayState:
             pygame.mixer.music.play(-1)
 
     def control_player(self):
-        pressed = pygame.key.get_pressed()
+        if not self.timer.is_running:
+            pressed = pygame.key.get_pressed()
+            if pressed[pygame.K_LEFT]:
+                self.player.move_left()
 
-        if pressed[pygame.K_LEFT]:
-            self.player.move_left()
+            if pressed[pygame.K_RIGHT]:
+                self.player.move_right()
 
-        if pressed[pygame.K_RIGHT]:
-            self.player.move_right()
+            if pressed[pygame.K_SPACE] and not self.space_pressed:
+                self.space_pressed = True
+                self.player.shot_bullet()
 
-        if pressed[pygame.K_SPACE] and not self.space_pressed:
-            self.space_pressed = True
-            self.player.shot_bullet()
-
-        if not pressed[pygame.K_SPACE]:
-            self.space_pressed = False
+            if not pressed[pygame.K_SPACE]:
+                self.space_pressed = False
 
     def animation(self):
         self.all_sprites.add(self.enemy_bullets)

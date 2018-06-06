@@ -13,7 +13,7 @@ ANGLE_ACCELERATION = SPEED_DAMPING + 1
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, bullets, timer):
+    def __init__(self, x, y, bullets):
         super().__init__()
         self.angle = 0
         self.speed = 0
@@ -27,7 +27,6 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.bounds = [POSITION_OFFSET,
                        x - self.image.get_width() - POSITION_OFFSET]
-        self.timer = timer
 
     def decrease_angle(self):
         if self.angle > 0:
@@ -52,25 +51,22 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = self.initial_position
 
     def move_left(self):
-        if not self.timer.is_running:
-            if self.rect.x > self.bounds[0]:
-                if self.speed > -MAX_SPEED:
-                    self.speed -= SPEED_ACCELERATION
-            if self.angle < MAX_ANGLE:
-                self.angle += ANGLE_ACCELERATION
+        if self.rect.x > self.bounds[0]:
+            if self.speed > -MAX_SPEED:
+                self.speed -= SPEED_ACCELERATION
+        if self.angle < MAX_ANGLE:
+            self.angle += ANGLE_ACCELERATION
 
     def move_right(self):
-        if not self.timer.is_running:
-            if self.rect.x < self.bounds[1]:
-                if self.speed < MAX_SPEED:
-                    self.speed += SPEED_ACCELERATION
-            if self.angle > -MAX_ANGLE:
-                self.angle -= ANGLE_ACCELERATION
+        if self.rect.x < self.bounds[1]:
+            if self.speed < MAX_SPEED:
+                self.speed += SPEED_ACCELERATION
+        if self.angle > -MAX_ANGLE:
+            self.angle -= ANGLE_ACCELERATION
 
     def shot_bullet(self):
-        if not self.timer.is_running:
-            bullet = PlayerBullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
-            self.bullets.add(bullet)
+        bullet = PlayerBullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
+        self.bullets.add(bullet)
 
 
 
