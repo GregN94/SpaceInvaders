@@ -6,12 +6,6 @@ POSITION_OFFSET = 10
 SPEED = 6
 
 
-class BulletsSprites:
-    def __init__(self):
-        self.player_bullets = pygame.sprite.Group()
-        self.enemy_bullets = pygame.sprite.Group()
-
-
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, image):
         super().__init__()
