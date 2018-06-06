@@ -42,10 +42,6 @@ class Enemies:
     def get(self):
         return self.enemies
 
-    def wait_for(self, time):
-        for enemy in self.enemies:
-            enemy.do_not_shot_time = time
-
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, enemy_bullets, direction, timer):

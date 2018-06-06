@@ -58,13 +58,6 @@ class PlayState:
         self.player_hit = False
         self.space_pressed = False
 
-    def print_wait(self, screen):
-        font = pygame.font.Font(None, 48)
-        text = font.render("Wait", True, (255, 255, 255))
-        if self.timer.is_running:
-            screen.blit(text,
-                        (self.screen_width / 2 - text.get_width() / 2, self.screen_height / 2 - text.get_height() / 2))
-
     def create_enemy_explosion(self, sprite_dict):
         for sprite in sprite_dict:
             if sprite_dict[sprite]:
@@ -138,8 +131,6 @@ class PlayState:
         self.player_explosion_sprite.draw(screen)
 
     def player_got_hit(self):
-        self.enemies.wait_for(DO_NOT_SHOT_TIME)
-        self.player.do_not_shot_time = DO_NOT_SHOT_TIME
         self.timer.start()
 
         self.player_explosion_sprite.update()
