@@ -7,7 +7,7 @@ from explosion import Explosion
 
 NUM_OF_ENEMIES_PER_LVL = 4
 BACKGROUND_SCALE = 1.5
-MAX_LVL = 9
+MAX_LVL = 15
 
 
 class Background(pygame.sprite.Sprite):
@@ -42,8 +42,9 @@ class PlayState:
         self.enemies = Enemies(self.num_of_enemies,
                                self.screen_width,
                                self.enemy_bullets,
-                               self.timer)
-        self.all_sprites.add(self.enemies.get())
+                               self.timer,
+                               self.player.initial_position[1])
+        self.all_sprites.add(self.enemies)
 
         self.num_of_lives = 3
         self.lives = []
@@ -64,7 +65,7 @@ class PlayState:
 
     def check_collision_bullets_enemies(self):
 
-        sprite_dict = pygame.sprite.groupcollide(self.enemies.get(),
+        sprite_dict = pygame.sprite.groupcollide(self.enemies,
                                                  self.player_bullets,
                                                  True,
                                                  True,
@@ -96,7 +97,7 @@ class PlayState:
             self.state = States.WON_LEVEL
 
     def check_if_game_over(self):
-        if len(self.lives) == 0:
+        if len(self.lives) == 0 or self.enemies.is_any_down_the_screen():
             self.player.kill()
             self.state = States.GAME_OVER
             pygame.mixer.music.load("Sounds/game_over_music")
@@ -135,7 +136,7 @@ class PlayState:
             self.player.go_to_initial_position()
             self.player_hit = False
 
-        self.enemies.get().update()
+        self.enemies.update()
         self.enemy_bullets.update()
 
     def fight(self):
@@ -155,7 +156,6 @@ class PlayState:
             self.player_got_hit()
         else:
             self.fight()
-
         return self.state
 
 

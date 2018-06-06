@@ -11,9 +11,10 @@ ENEMY_PATH = ["Images/enemy.png", "Images/enemy_up.png"]
 DO_NOT_SHOT_TIME_INIT = 60
 
 
-class Enemies:
-    def __init__(self, num_of_enemies, screen_width, bullets, timer):
-        self.enemies = pygame.sprite.Group()
+class Enemies(pygame.sprite.Group):
+    def __init__(self, num_of_enemies, screen_width, bullets, timer, finish_position):
+        super().__init__()
+        self.finish_position = finish_position
         self.generate_enemies(num_of_enemies, screen_width, bullets, timer)
 
     def generate_enemies(self, num_of_enemies, screen_width, bullets, timer):
@@ -37,10 +38,13 @@ class Enemies:
                           height,
                           bullets,
                           direction, timer)
-            self.enemies.add(enemy)
+            self.add(enemy)
 
-    def get(self):
-        return self.enemies
+    def is_any_down_the_screen(self):
+        for enemy in self.sprites():
+            if enemy.rect.y >= self.finish_position:
+                return True
+        return False
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -66,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.center = position
 
     def change_direction(self):
-        self.rect.y += self.image.get_height()
+        self.rect.y += 55
         self.speed *= -1
 
     def update(self):
@@ -78,6 +82,7 @@ class Enemy(pygame.sprite.Sprite):
             self.change_direction()
 
         if random.randrange(0, 200, 2) == 16 and not self.timer.is_running:
+            return
             self.shot_bullet()
             self.animation()
 
