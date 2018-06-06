@@ -1,5 +1,6 @@
 import pygame
 import utils
+from enemy import Enemies
 from player import Player
 from States.menu_state import States
 from explosion import Explosion
@@ -40,11 +41,10 @@ class PlayState:
         self.all_sprites.add(self.player)
 
         self.num_of_enemies = NUM_OF_ENEMIES_PER_LVL * self.level
-        self.enemies_sprites = pygame.sprite.Group()
-        self.all_sprites.add(utils.generate_enemies(self.num_of_enemies,
-                                                    self.screen_width,
-                                                    self.enemy_bullets,
-                                                    self.enemies_sprites))
+        self.enemies = Enemies(self.num_of_enemies,
+                               self.screen_width,
+                               self.enemy_bullets)
+        self.all_sprites.add(self.enemies.get())
 
         self.num_of_lives = 3
         self.lives = []
@@ -55,12 +55,16 @@ class PlayState:
         self.state = States.GAME
         self.player_hit = False
         self.space_pressed = False
-        self.do_not_shot_time = DO_NOT_SHOT_TIME_INIT
+
+    def waiting(self):
+        if self.player.do_not_shot_time:
+            return True
+        return False
 
     def print_wait(self, screen):
         font = pygame.font.Font(None, 48)
         text = font.render("Wait", True, (255, 255, 255))
-        if self.do_not_shot_time:
+        if self.player.do_not_shot_time:
             screen.blit(text,
                         (self.screen_width / 2 - text.get_width() / 2, self.screen_height / 2 - text.get_height() / 2))
 
@@ -73,7 +77,7 @@ class PlayState:
 
     def check_collision_bullets_enemies(self):
 
-        sprite_dict = pygame.sprite.groupcollide(self.enemies_sprites,
+        sprite_dict = pygame.sprite.groupcollide(self.enemies.get(),
                                                  self.player_bullets,
                                                  True,
                                                  True,
@@ -93,7 +97,6 @@ class PlayState:
                                                 pygame.sprite.collide_mask)
         if bullet:
             self.player_hit = True
-            self.do_not_shot_time = DO_NOT_SHOT_TIME
             bullet.kill()
             self.kill_player()
 
@@ -138,8 +141,7 @@ class PlayState:
         self.player_explosion_sprite.draw(screen)
 
     def player_got_hit(self):
-        for enemy in self.enemies_sprites:
-            enemy.do_not_shot_time = DO_NOT_SHOT_TIME
+        self.enemies.wait_for(DO_NOT_SHOT_TIME)
         self.player.do_not_shot_time = DO_NOT_SHOT_TIME
 
         self.player_explosion_sprite.update()
@@ -147,7 +149,7 @@ class PlayState:
             self.player.go_to_initial_position()
             self.player_hit = False
 
-        self.enemies_sprites.update()
+        self.enemies.get().update()
         self.enemy_bullets.update()
 
     def fight(self):
@@ -156,9 +158,7 @@ class PlayState:
         self.all_sprites.add(self.player_bullets,
                              self.enemy_bullets)
         self.all_sprites.update()
-        if self.do_not_shot_time:
-            self.do_not_shot_time -= 1
-        else:
+        if not self.waiting():
             self.check_collision_bullets_player()
         self.check_collision_bullets_enemies()
         self.check_if_won()

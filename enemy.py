@@ -1,6 +1,7 @@
 import pygame
 import random
 import utils
+import math
 from bullets import EnemyBullet
 
 SCALE = 6
@@ -8,6 +9,42 @@ POSITION_OFFSET = 10
 SPEED = 1
 ENEMY_PATH = ["Images/enemy.png", "Images/enemy_up.png"]
 DO_NOT_SHOT_TIME_INIT = 60
+
+
+class Enemies:
+    def __init__(self, num_of_enemies, screen_width, bullets):
+        self.enemies = pygame.sprite.Group()
+        self.generate_enemies(num_of_enemies, screen_width, bullets)
+
+    def generate_enemies(self, num_of_enemies, screen_width, bullets):
+        rows = math.ceil(num_of_enemies / 10)
+        enemy_per_row = math.ceil(num_of_enemies / rows)
+        enemy_in_row = 0
+        row = 1
+        for i in range(num_of_enemies):
+            if enemy_in_row + 1 > enemy_per_row:
+                row += 1
+                enemy_in_row = 0
+            direction = 1
+            if row % 2:
+                width = (enemy_in_row + 1) * 80
+            else:
+                width = screen_width - ((enemy_per_row - enemy_in_row) * 80)
+                direction = -1
+            height = 70 + row * 55
+            enemy_in_row += 1
+            enemy = Enemy(width,
+                          height,
+                          bullets,
+                          direction)
+            self.enemies.add(enemy)
+
+    def get(self):
+        return self.enemies
+
+    def wait_for(self, time):
+        for enemy in self.enemies:
+            enemy.do_not_shot_time = time
 
 
 class Enemy(pygame.sprite.Sprite):
