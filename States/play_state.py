@@ -8,6 +8,8 @@ from explosion import Explosion
 NUM_OF_ENEMIES_PER_LVL = 4
 BACKGROUND_SCALE = 1.5
 MAX_LVL = 9
+DO_NOT_SHOT_TIME_INIT = 60
+DO_NOT_SHOT_TIME = 120
 
 
 class Background(pygame.sprite.Sprite):
@@ -53,6 +55,21 @@ class PlayState:
         self.state = States.GAME
         self.player_hit = False
         self.space_pressed = False
+        self.do_not_shot_time = DO_NOT_SHOT_TIME_INIT
+
+    def print_wait(self, screen):
+        font = pygame.font.Font(None, 48)
+        text = font.render("Wait", True, (255, 255, 255))
+        if self.do_not_shot_time:
+            screen.blit(text,
+                        (self.screen_width / 2 - text.get_width() / 2, self.screen_height / 2 - text.get_height() / 2))
+
+    def create_enemy_explosion(self, sprite_dict):
+        for sprite in sprite_dict:
+            if sprite_dict[sprite]:
+                explosion = Explosion(sprite.rect.center)
+                self.all_sprites.add(explosion)
+                self.num_of_enemies -= 1
 
     def check_collision_bullets_enemies(self):
 
@@ -61,11 +78,14 @@ class PlayState:
                                                  True,
                                                  True,
                                                  pygame.sprite.collide_mask)
-        for sprite in sprite_dict:
-            if sprite_dict[sprite]:
-                explosion = Explosion(sprite.rect.center)
-                self.all_sprites.add(explosion)
-                self.num_of_enemies -= 1
+        self.create_enemy_explosion(sprite_dict)
+
+    def kill_player(self):
+        if len(self.lives):
+            life = self.lives.pop()
+            life.kill()
+            explosion = Explosion(self.player.rect.center)
+            self.player_explosion_sprite.add(explosion)
 
     def check_collision_bullets_player(self):
         bullet = pygame.sprite.spritecollideany(self.player,
@@ -73,12 +93,9 @@ class PlayState:
                                                 pygame.sprite.collide_mask)
         if bullet:
             self.player_hit = True
+            self.do_not_shot_time = DO_NOT_SHOT_TIME
             bullet.kill()
-            if len(self.lives):
-                life = self.lives.pop()
-                life.kill()
-                explosion = Explosion(self.player.rect.center)
-                self.player_explosion_sprite.add(explosion)
+            self.kill_player()
 
     def check_if_won(self):
         if self.num_of_enemies == 0:
@@ -120,7 +137,10 @@ class PlayState:
         self.all_sprites.draw(screen)
         self.player_explosion_sprite.draw(screen)
 
-    def player_got_hit_state(self):
+    def player_got_hit(self):
+        for enemy in self.enemies_sprites:
+            enemy.do_not_shot_time = DO_NOT_SHOT_TIME
+        self.player.do_not_shot_time = DO_NOT_SHOT_TIME
 
         self.player_explosion_sprite.update()
         if len(self.player_explosion_sprite.sprites()) == 0:
@@ -130,23 +150,25 @@ class PlayState:
         self.enemies_sprites.update()
         self.enemy_bullets.update()
 
-    def fight_state(self):
+    def fight(self):
         self.control_player()
 
         self.all_sprites.add(self.player_bullets,
                              self.enemy_bullets)
         self.all_sprites.update()
-
-        self.check_collision_bullets_player()
+        if self.do_not_shot_time:
+            self.do_not_shot_time -= 1
+        else:
+            self.check_collision_bullets_player()
         self.check_collision_bullets_enemies()
         self.check_if_won()
         self.check_if_game_over()
 
     def update(self):
         if self.player_hit:
-            self.player_got_hit_state()
+            self.player_got_hit()
         else:
-            self.fight_state()
+            self.fight()
 
         return self.state
 

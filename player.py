@@ -27,6 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.bounds = [POSITION_OFFSET,
                        x - self.image.get_width() - POSITION_OFFSET]
+        self.do_not_shot_time = 60
 
     def decrease_angle(self):
         if self.angle > 0:
@@ -47,6 +48,9 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image_copy, self.angle)
         self.rect.x += self.speed
 
+        if self.do_not_shot_time:
+            self.do_not_shot_time -= 1
+
     def go_to_initial_position(self):
         self.rect.center = self.initial_position
 
@@ -65,6 +69,7 @@ class Player(pygame.sprite.Sprite):
             self.angle -= ANGLE_ACCELERATION
 
     def shot_bullet(self):
+        if not self.do_not_shot_time:
             bullet = PlayerBullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
             self.bullets.add(bullet)
 
