@@ -26,11 +26,10 @@ class PlayState:
         self.bullets = BulletsSprites()
         self.player = Player(self.screen_width,
                              self.screen_height,
-                             self.bullets.bullets)
+                             self.bullets.player_bullets)
 
-        self.background = Background()
         self.background_sprite = pygame.sprite.Group()
-        self.background_sprite.add(self.background)
+        self.background_sprite.add(Background())
 
         self.player_explosion_sprite = pygame.sprite.Group()
         self.pause_sprites = pygame.sprite.Group()
@@ -58,7 +57,7 @@ class PlayState:
     def check_collision_bullets_enemies(self):
 
         sprite_dict = pygame.sprite.groupcollide(self.enemies_sprites,
-                                                 self.bullets.bullets,
+                                                 self.bullets.player_bullets,
                                                  True,
                                                  True,
                                                  pygame.sprite.collide_mask)
@@ -134,7 +133,7 @@ class PlayState:
     def fight_state(self):
         self.control_player()
 
-        self.all_sprites.add(self.bullets.bullets,
+        self.all_sprites.add(self.bullets.player_bullets,
                              self.bullets.enemy_bullets)
         self.all_sprites.update()
 

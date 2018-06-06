@@ -47,22 +47,18 @@ class Logo(pygame.sprite.Sprite):
 
 class BasicState:
     def __init__(self, screen, image):
-        self.background = Background(screen)
-        self.panel = PausePanel(screen)
         self.logo = Logo(screen, image)
-        self.resume_button = ResumeButton(screen)
         self.retry_button = RetryButton(screen)
         self.go_to_menu_button = GoToMenuButton(screen)
         self.exit_button = ExitButton(screen)
 
         self.background_sprites_list = pygame.sprite.Group()
-        self.background_sprites_list.add(self.background)
+        self.background_sprites_list.add(Background(screen))
 
         self.panel_sprite_list = pygame.sprite.Group()
-        self.panel_sprite_list.add(self.panel)
+        self.panel_sprite_list.add(PausePanel(screen))
 
         self.buttons_sprite_list = pygame.sprite.Group()
-
         self.buttons_sprite_list.add(self.logo,
                                      self.exit_button,
                                      self.retry_button,

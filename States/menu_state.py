@@ -39,31 +39,30 @@ class LogoSprite(pygame.sprite.Sprite):
 
 class MenuState:
     def __init__(self, screen):
-        self.menu_sprite = MenuBackground(screen)
-        self.logo_sprite = LogoSprite(screen[0])
-        self.start_button_sprite = StartButton(screen)
-        self.exit_button_sprite = ExitButton(screen)
+        self.start_button = StartButton(screen)
+        self.exit_button = ExitButton(screen)
 
-        self.menu_sprites_list = pygame.sprite.Group()
-        self.background_sprite_list = pygame.sprite.Group()
-        self.background_sprite_list.add(self.menu_sprite)
-        self.menu_sprites_list.add(self.logo_sprite, self.start_button_sprite, self.exit_button_sprite)
+        self.background = pygame.sprite.Group()
+        self.background.add(MenuBackground(screen))
+
+        self.menu_sprites = pygame.sprite.Group()
+        self.menu_sprites.add(LogoSprite(screen[0]), self.start_button, self.exit_button)
 
     def update(self):
         new_state = States.MENU
 
-        if self.start_button_sprite.check():
+        if self.start_button.check():
             pygame.mixer.music.play(-1)
             new_state = States.GAME
 
-        if self.exit_button_sprite.check():
+        if self.exit_button.check():
             new_state = States.EXIT
 
-        self.menu_sprites_list.update()
+        self.menu_sprites.update()
         return new_state
 
     def draw(self, screen):
-        self.background_sprite_list.draw(screen)
-        self.menu_sprites_list.draw(screen)
+        self.background.draw(screen)
+        self.menu_sprites.draw(screen)
 
 
