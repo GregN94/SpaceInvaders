@@ -9,9 +9,6 @@ SPEED = 6
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, image):
         super().__init__()
-        self.shot_sound = pygame.mixer.Sound("Sounds/player_shot.ogg")
-        self.shot_sound.set_volume(0.3)
-        self.shot_sound.play(0, 400, 0)
         self.image = utils.load_and_scale(image, SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y - int(self.image.get_height() / 2) - POSITION_OFFSET)
@@ -20,6 +17,9 @@ class Bullet(pygame.sprite.Sprite):
 
 class PlayerBullet(Bullet):
     def __init__(self, x, y):
+        self.shoot_sound = pygame.mixer.Sound("Sounds/player_shoot.ogg")
+        self.shoot_sound.set_volume(0.3)
+        self.shoot_sound.play(0, 400, 0)
         super().__init__(x, y, "Images/bullet.png")
 
     def update(self):
@@ -30,6 +30,9 @@ class PlayerBullet(Bullet):
 
 class EnemyBullet(Bullet):
     def __init__(self, x, y):
+        self.shoot_sound = pygame.mixer.Sound("Sounds/enemy_shoot.ogg")
+        self.shoot_sound.set_volume(0.3)
+        self.shoot_sound.play(0, 400, 0)
         super().__init__(x, y, "Images/enemy_bullet.png")
 
     def update(self):

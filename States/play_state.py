@@ -114,7 +114,7 @@ class PlayState:
 
             if pressed[pygame.K_SPACE] and not self.space_pressed:
                 self.space_pressed = True
-                self.player.shot_bullet()
+                self.player.shoot_bullet()
 
             if not pressed[pygame.K_SPACE]:
                 self.space_pressed = False

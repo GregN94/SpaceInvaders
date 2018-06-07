@@ -64,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         if self.angle > -MAX_ANGLE:
             self.angle -= ANGLE_ACCELERATION
 
-    def shot_bullet(self):
+    def shoot_bullet(self):
         bullet = PlayerBullet(self.rect.x + self.image.get_width() / 2, self.rect.y)
         self.bullets.add(bullet)
 

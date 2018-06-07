@@ -8,13 +8,12 @@ SCALE = 6
 POSITION_OFFSET = 10
 SPEED = 1
 ENEMY_PATH = ["Images/enemy.png", "Images/enemy_up.png"]
-DO_NOT_SHOT_TIME_INIT = 60
 
 
 class Enemies(pygame.sprite.Group):
     def __init__(self, num_of_enemies, screen_width, bullets, timer, finish_position):
         super().__init__()
-        self.finish_position = finish_position
+        self.finish_position = finish_position - 3 * POSITION_OFFSET
         self.generate_enemies(num_of_enemies, screen_width, bullets, timer)
 
     def generate_enemies(self, num_of_enemies, screen_width, bullets, timer):
@@ -83,10 +82,10 @@ class Enemy(pygame.sprite.Sprite):
 
         if random.randrange(0, 200, 2) == 16 and not self.timer.is_running:
             return
-            self.shot_bullet()
+            self.shoot_bullet()
             self.animation()
 
-    def shot_bullet(self):
+    def shoot_bullet(self):
         bullet = EnemyBullet(self.rect.x + self.image.get_width() / 2,
                              self.rect.y + self.image.get_height() + POSITION_OFFSET)
         self.enemy_bullets.add(bullet)
