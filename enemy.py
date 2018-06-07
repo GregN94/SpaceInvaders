@@ -81,7 +81,6 @@ class Enemy(pygame.sprite.Sprite):
             self.change_direction()
 
         if random.randrange(0, 200, 2) == 16 and not self.timer.is_running:
-            return
             self.shoot_bullet()
             self.animation()
 
